@@ -7,7 +7,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import type { ThreatAction } from "@/types/fraud"
 
-const actionStyles: Record<ThreatAction, string> = { BLOCK: "border-red-500/40 bg-red-500/10 text-red-300", HOLD: "border-amber-500/40 bg-amber-500/10 text-amber-300", VERIFY: "border-blue-500/40 bg-blue-500/10 text-blue-300", ALLOW: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300" }
+const actionStyles: Record<ThreatAction, string> = { BLOCK: "border-orange-500/40 bg-orange-500/10 text-orange-300", HOLD: "border-amber-500/40 bg-amber-500/10 text-amber-300", VERIFY: "border-yellow-500/40 bg-yellow-500/10 text-yellow-300", ALLOW: "border-lime-500/40 bg-lime-500/10 text-lime-300" }
 
 export function CommandCenter() {
   const [snapshot, setSnapshot] = useState<Awaited<ReturnType<typeof getDashboardData>> | null>(null)
@@ -15,7 +15,7 @@ export function CommandCenter() {
   if (!snapshot) return <div className="flex min-h-[60vh] items-center justify-center font-mono text-xs text-slate-500">LOADING DEFENSE GRID...</div>
 
   const stats = [
-    { label: "Transactions", value: snapshot.transactions.toLocaleString(), delta: "+12.4%", icon: Radio, tone: "text-blue-400" },
+    { label: "Transactions", value: snapshot.transactions.toLocaleString(), delta: "+12.4%", icon: Radio, tone: "text-yellow-300" },
     { label: "Fraud Detected", value: snapshot.fraudDetected.toLocaleString(), delta: "+8.2%", icon: ShieldAlert, tone: "text-red-400" },
     { label: "Attacks Run", value: snapshot.attacksRun.toString(), delta: "+24.0%", icon: Zap, tone: "text-amber-400" },
     { label: "Avg Risk Score", value: snapshot.averageRiskScore.toFixed(1), delta: "-3.1%", icon: CheckCircle2, tone: "text-emerald-400" },

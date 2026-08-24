@@ -49,38 +49,38 @@
 }
 
 :root {
-    --background: oklch(0.09 0.02 250);
-    --foreground: oklch(0.92 0.02 250);
-    --card: oklch(0.14 0.025 250);
-    --card-foreground: oklch(0.92 0.02 250);
-    --popover: oklch(0.14 0.025 250);
-    --popover-foreground: oklch(0.92 0.02 250);
-    --primary: oklch(0.65 0.2 25);
-    --primary-foreground: oklch(0.98 0.01 25);
-    --secondary: oklch(0.18 0.03 250);
-    --secondary-foreground: oklch(0.92 0.02 250);
-    --muted: oklch(0.18 0.03 250);
-    --muted-foreground: oklch(0.58 0.03 250);
-    --accent: oklch(0.18 0.03 250);
-    --accent-foreground: oklch(0.92 0.02 250);
-    --destructive: oklch(0.65 0.2 25);
-    --border: oklch(0.24 0.035 250);
-    --input: oklch(0.24 0.035 250);
-    --ring: oklch(0.65 0.2 25);
+    --background: oklch(0.065 0.012 285);
+    --foreground: oklch(0.92 0.012 285);
+    --card: oklch(0.11 0.014 285);
+    --card-foreground: oklch(0.92 0.012 285);
+    --popover: oklch(0.11 0.014 285);
+    --popover-foreground: oklch(0.92 0.012 285);
+    --primary: oklch(0.58 0.18 275);
+    --primary-foreground: oklch(0.98 0.005 285);
+    --secondary: oklch(0.15 0.014 285);
+    --secondary-foreground: oklch(0.92 0.012 285);
+    --muted: oklch(0.15 0.014 285);
+    --muted-foreground: oklch(0.62 0.012 285);
+    --accent: oklch(0.15 0.014 285);
+    --accent-foreground: oklch(0.92 0.012 285);
+    --destructive: oklch(0.68 0.22 28);
+    --border: oklch(0.22 0.014 285);
+    --input: oklch(0.22 0.014 285);
+    --ring: oklch(0.58 0.18 275);
     --chart-1: oklch(0.87 0 0);
     --chart-2: oklch(0.556 0 0);
     --chart-3: oklch(0.439 0 0);
     --chart-4: oklch(0.371 0 0);
     --chart-5: oklch(0.269 0 0);
     --radius: 0.625rem;
-    --sidebar: oklch(0.11 0.025 250);
-    --sidebar-foreground: oklch(0.92 0.02 250);
-    --sidebar-primary: oklch(0.65 0.2 25);
+    --sidebar: oklch(0.075 0.012 285);
+    --sidebar-foreground: oklch(0.92 0.012 285);
+    --sidebar-primary: oklch(0.58 0.18 275);
     --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.18 0.03 250);
-    --sidebar-accent-foreground: oklch(0.92 0.02 250);
-    --sidebar-border: oklch(0.24 0.035 250);
-    --sidebar-ring: oklch(0.708 0 0);
+    --sidebar-accent: oklch(0.15 0.014 285);
+    --sidebar-accent-foreground: oklch(0.92 0.012 285);
+    --sidebar-border: oklch(0.22 0.014 285);
+    --sidebar-ring: oklch(0.58 0.18 275);
 }
 
 .dark {
@@ -124,10 +124,91 @@
   body {
     min-width: 320px;
     @apply bg-background text-foreground;
-    background-image: linear-gradient(rgba(17, 28, 43, 0.18) 1px, transparent 1px), linear-gradient(90deg, rgba(17, 28, 43, 0.18) 1px, transparent 1px);
-    background-size: 32px 32px;
+    background-image: linear-gradient(rgba(207, 173, 103, 0.14) 1px, transparent 1px), linear-gradient(90deg, rgba(207, 173, 103, 0.14) 1px, transparent 1px);
+    background-size: 36px 36px;
     }
   html {
     @apply font-sans;
     }
+}
+
+  .bg-\[\#070b12\] { background-color: #0a0a0f; }
+  .bg-\[\#0a1019\] { background-color: #111118; }
+  .bg-\[\#0d1520\] { background-color: #18181f; }
+  .border-slate-800, .border-slate-800\/80, .border-slate-800\/70 { border-color: rgb(255 255 255 / 0.1); }
+  .text-slate-100, .text-slate-200 { color: #e4e4e7; }
+  .text-slate-300 { color: #d4d4d8; }
+  .text-slate-400 { color: #a1a1aa; }
+  .text-slate-500 { color: #71717a; }
+  .text-slate-600 { color: #52525b; }
+  .text-blue-400, .text-blue-300 { color: #818cf8; }
+  .border-blue-500\/20, .border-blue-500\/40, .border-blue-500\/60 { border-color: rgb(99 102 241 / 0.3); }
+  .bg-blue-500\/10 { background-color: rgb(79 70 229 / 0.1); }
+  .bg-slate-800\/50, .bg-slate-800\/30 { background-color: #27272a; }
+  .bg-slate-800 { background-color: #27272a; }
+
+.dashboard-shell {
+  background-image: radial-gradient(circle at 78% 0%, rgb(79 70 229 / 0.12), transparent 34%), radial-gradient(circle at 20% 100%, rgb(30 27 75 / 0.16), transparent 38%);
+}
+
+.security-hero {
+  background-color: #211f49;
+  background-image: radial-gradient(circle at 78% 28%, rgb(79 70 229 / 0.72), transparent 34%), radial-gradient(circle at 38% 92%, rgb(49 46 129 / 0.76), transparent 42%), radial-gradient(circle at 8% 12%, rgb(255 255 255 / 0.12), transparent 28%), conic-gradient(from 210deg at 72% 42%, #1e1b4b, #4338ca, #312e81, #111827, #1e1b4b);
+}
+
+.dashboard-float {
+  animation: hero-enter 500ms ease-out both;
+  animation-delay: var(--delay);
+}
+
+.hero-reveal {
+  animation: hero-reveal 360ms ease-out both;
+  animation-delay: var(--delay);
+}
+
+/* The scan timeline repeats every five seconds: progress runs for two seconds,
+   status messages take turns, and the counter interpolates through risk values. */
+.scan-progress {
+  transform-origin: left;
+  animation: scan-progress 5s ease-out infinite;
+}
+
+@property --risk-score {
+  syntax: "<integer>";
+  inherits: false;
+  initial-value: 42;
+}
+
+.risk-score {
+  --risk-score: 42;
+  animation: risk-score 5s ease-out infinite;
+}
+
+.risk-score::after {
+  content: counter(risk-score);
+  counter-reset: risk-score var(--risk-score);
+}
+
+.scan-status span { display: none; }
+.scan-status .status-scanning { display: inline; animation: status-scanning 5s ease-out infinite; }
+.scan-status .status-threat { animation: status-threat 5s ease-out infinite; }
+.scan-status .status-verified { animation: status-verified 5s ease-out infinite; }
+
+.signal-safe { color: #10b981; border-color: rgb(16 185 129 / 0.35); background-color: rgb(16 185 129 / 0.12); }
+.signal-warning { color: #f59e0b; border-color: rgb(245 158 11 / 0.35); background-color: rgb(245 158 11 / 0.12); }
+.signal-danger { color: #ef4444; border-color: rgb(239 68 68 / 0.35); background-color: rgb(239 68 68 / 0.12); }
+.signal-dot { background-color: currentColor; }
+
+@keyframes hero-enter { from { opacity: 0; transform: translateY(16px) rotate(1deg); } to { opacity: 1; transform: translateY(0) rotate(0); } }
+@keyframes hero-reveal { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes scan-progress { 0%, 8% { transform: scaleX(0); } 48%, 76% { transform: scaleX(1); } 100% { transform: scaleX(0); } }
+@keyframes risk-score { 0%, 8% { --risk-score: 42; } 48%, 76% { --risk-score: 87; } 100% { --risk-score: 42; } }
+@keyframes status-scanning { 0%, 35% { opacity: 1; } 36%, 100% { opacity: 0; } }
+@keyframes status-threat { 0%, 35% { display: none; opacity: 0; } 36%, 70% { display: inline; opacity: 1; } 71%, 100% { display: none; opacity: 0; } }
+@keyframes status-verified { 0%, 70% { display: none; opacity: 0; } 71%, 100% { display: inline; opacity: 1; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-float, .hero-reveal, .scan-progress, .risk-score, .scan-status span { animation: none; }
+  .scan-progress { transform: scaleX(1); }
+  .scan-status .status-scanning { display: inline; }
 }
