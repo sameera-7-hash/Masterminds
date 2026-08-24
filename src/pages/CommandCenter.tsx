@@ -1,0 +1,32 @@
+import { useEffect, useState } from "react"
+import { ArrowUpRight, Bot, CheckCircle2, Radio, ShieldAlert, Zap } from "lucide-react"
+import { getDashboardData } from "@/api/dashboard"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import type { ThreatAction } from "@/types/fraud"
+
+const actionStyles: Record<ThreatAction, string> = { BLOCK: "border-red-500/40 bg-red-500/10 text-red-300", HOLD: "border-amber-500/40 bg-amber-500/10 text-amber-300", VERIFY: "border-blue-500/40 bg-blue-500/10 text-blue-300", ALLOW: "border-emerald-500/40 bg-emerald-500/10 text-emerald-300" }
+
+export function CommandCenter() {
+  const [snapshot, setSnapshot] = useState<Awaited<ReturnType<typeof getDashboardData>> | null>(null)
+  useEffect(() => { void getDashboardData().then(setSnapshot) }, [])
+  if (!snapshot) return <div className="flex min-h-[60vh] items-center justify-center font-mono text-xs text-slate-500">LOADING DEFENSE GRID...</div>
+
+  const stats = [
+    { label: "Transactions", value: snapshot.transactions.toLocaleString(), delta: "+12.4%", icon: Radio, tone: "text-blue-400" },
+    { label: "Fraud Detected", value: snapshot.fraudDetected.toLocaleString(), delta: "+8.2%", icon: ShieldAlert, tone: "text-red-400" },
+    { label: "Attacks Run", value: snapshot.attacksRun.toString(), delta: "+24.0%", icon: Zap, tone: "text-amber-400" },
+    { label: "Avg Risk Score", value: snapshot.averageRiskScore.toFixed(1), delta: "-3.1%", icon: CheckCircle2, tone: "text-emerald-400" },
+  ]
+
+  return <div className="space-y-8">
+    <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{stats.map(({ label, value, delta, icon: Icon, tone }) => <Card key={label} className="border-slate-800 bg-[#0d1520] shadow-none"><CardContent className="p-5"><div className="flex items-start justify-between"><div><p className="font-mono text-[10px] uppercase tracking-[0.18em] text-slate-500">{label}</p><p className="mt-3 font-mono text-3xl font-semibold tracking-tight text-slate-100">{value}</p></div><Icon className={`size-5 ${tone}`} /></div><p className="mt-4 font-mono text-[10px] text-emerald-400">{delta} <span className="text-slate-600">vs last cycle</span></p></CardContent></Card>)}</section>
+    <section className="grid gap-4 xl:grid-cols-2">
+      <Card className="border-red-500/20 bg-[#0d1520] shadow-none"><CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4"><CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-200"><span className="size-2 rounded-full bg-red-400 shadow-[0_0_10px_#f87171]" /> Red Team Status</CardTitle><Badge variant="outline" className="border-red-500/30 font-mono text-[10px] text-red-300">ACTIVE</Badge></CardHeader><CardContent className="flex items-center justify-between gap-5 p-5"><div><p className="font-mono text-[10px] uppercase tracking-wider text-slate-500">Current agent</p><p className="mt-2 flex items-center gap-2 font-mono text-lg text-white"><Bot className="size-4 text-red-400" />{snapshot.currentAgent}</p><p className="mt-2 text-xs text-slate-500">Generating adversarial scenarios</p></div><Button className="bg-red-500 text-white hover:bg-red-400"><Zap className="mr-2 size-4" />Generate Attack</Button></CardContent></Card>
+      <Card className="border-blue-500/20 bg-[#0d1520] shadow-none"><CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4"><CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-200"><span className="size-2 rounded-full bg-blue-400 shadow-[0_0_10px_#60a5fa]" /> Blue Team Status</CardTitle><Badge variant="outline" className="border-emerald-500/30 font-mono text-[10px] text-emerald-300">DEFENDING</Badge></CardHeader><CardContent className="grid grid-cols-2 gap-6 p-5"><div><p className="font-mono text-[10px] uppercase tracking-wider text-slate-500">Detection rate</p><p className="mt-2 font-mono text-2xl text-blue-300">{snapshot.detectionRate}%</p><p className="mt-2 text-xs text-slate-500">Ensemble consensus</p></div><div><p className="font-mono text-[10px] uppercase tracking-wider text-slate-500">False positive</p><p className="mt-2 font-mono text-2xl text-emerald-300">{snapshot.falsePositiveRate}%</p><p className="mt-2 text-xs text-slate-500">Within target threshold</p></div></CardContent></Card>
+    </section>
+    <Card className="border-slate-800 bg-[#0d1520] shadow-none"><CardHeader className="flex flex-row items-end justify-between border-b border-slate-800/80 px-5 py-4"><div><CardTitle className="text-sm font-medium text-slate-100">Recent Threats</CardTitle><p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-slate-600">Latest adversarial activity</p></div><Button variant="ghost" className="font-mono text-[10px] uppercase tracking-wider text-slate-500 hover:text-white">View all <ArrowUpRight className="ml-1 size-3" /></Button></CardHeader><CardContent className="p-0"><div className="overflow-x-auto"><Table><TableHeader><TableRow className="border-slate-800 hover:bg-transparent"><TableHead className="pl-5 font-mono text-[10px] uppercase tracking-wider text-slate-600">Attack type</TableHead><TableHead className="font-mono text-[10px] uppercase tracking-wider text-slate-600">Agent</TableHead><TableHead className="font-mono text-[10px] uppercase tracking-wider text-slate-600">Risk score</TableHead><TableHead className="pr-5 font-mono text-[10px] uppercase tracking-wider text-slate-600">Action</TableHead></TableRow></TableHeader><TableBody>{snapshot.recentThreats.map((threat) => <TableRow key={threat.id} className="border-slate-800/70"><TableCell className="pl-5"><p className="text-sm text-slate-200">{threat.type}</p><p className="mt-1 text-xs text-slate-600">{threat.createdAt}</p></TableCell><TableCell className="font-mono text-xs text-slate-500">{threat.agent}</TableCell><TableCell><span className={`font-mono text-sm font-semibold ${threat.riskScore > 70 ? "text-red-300" : threat.riskScore > 40 ? "text-amber-300" : "text-emerald-300"}`}>{threat.riskScore}<span className="text-slate-600">/100</span></span></TableCell><TableCell className="pr-5"><Badge variant="outline" className={actionStyles[threat.action]}>{threat.action}</Badge></TableCell></TableRow>)}</TableBody></Table></div></CardContent></Card>
+  </div>
+}
