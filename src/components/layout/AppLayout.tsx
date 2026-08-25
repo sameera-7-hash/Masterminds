@@ -1,4 +1,4 @@
-import { NavLink, Outlet, useLocation } from "react-router-dom"
+import { Link, NavLink, Outlet, useLocation } from "react-router-dom"
 import { AnimatePresence, motion } from "framer-motion"
 import { Activity, Bot, Crosshair, Radar, ShieldCheck, TerminalSquare } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
@@ -23,7 +23,7 @@ export function AppLayout() {
 
   return <div className="dashboard-shell min-h-svh bg-[#0a0a0f] text-[#e4e4e7]">
     <aside className="fixed inset-y-0 left-0 z-20 hidden w-64 flex-col border-r border-white/10 bg-[#111118] lg:flex">
-      <div className="flex h-20 items-center gap-3 px-6"><div className="flex size-9 items-center justify-center rounded border border-indigo-400/30 bg-indigo-500/10 text-indigo-300"><TerminalSquare className="size-5" /></div><div><p className="font-mono text-sm font-bold tracking-[0.18em] text-white">FRAUDSHIELD</p><p className="font-mono text-[10px] uppercase tracking-[0.26em] text-zinc-500">AI DEFENSE GRID</p></div></div>
+      <Link to="/" className="group flex h-20 items-center gap-3 px-6 transition-colors hover:bg-white/5"><div className="flex size-9 items-center justify-center rounded border border-indigo-400/30 bg-indigo-500/10 text-indigo-300 transition-colors group-hover:border-indigo-400/60 group-hover:bg-indigo-500/20"><TerminalSquare className="size-5" /></div><div><p className="font-mono text-sm font-bold tracking-[0.18em] text-white">FRAUDSHIELD</p><p className="font-mono text-[10px] uppercase tracking-[0.26em] text-zinc-500">AI DEFENSE GRID</p></div></Link>
       <Separator className="bg-slate-800/80" />
       <div className="px-4 py-6"><p className="mb-3 px-3 font-mono text-[10px] uppercase tracking-[0.2em] text-slate-600">Operations</p><Navigation /></div>
       <div className="mt-auto p-4"><div className="border border-white/10 bg-[#18181f] p-4"><div className="mb-2 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.15em] text-emerald-400"><Bot className="size-3.5" /> System online</div><p className="font-mono text-[11px] leading-relaxed text-zinc-500">Autonomous agents are monitoring live simulation traffic.</p></div></div>
