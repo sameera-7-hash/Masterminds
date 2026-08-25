@@ -1,4 +1,4 @@
-import { ArrowRight, Check, ShieldCheck, ShieldHalf, Sparkles } from "lucide-react"
+import { ArrowRight, Check, ShieldCheck, ShieldHalf } from "lucide-react"
 import type { CSSProperties } from "react"
 import { Link } from "react-router-dom"
 import { motion } from "framer-motion"
