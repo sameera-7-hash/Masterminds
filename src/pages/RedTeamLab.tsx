@@ -1,5 +1,3 @@
-const RED_TEAM_API =
-  "https://fraudshield-redteam-api.onrender.com"
 import { useState } from "react"
 import {
   Bot,
@@ -117,6 +115,13 @@ type Signals = {
 // API RESPONSE TYPE
 // ============================================================
 
+type Transaction = {
+  risk_reason?: string
+  user_id?: string
+  amount?: number
+  [key: string]: unknown
+}
+
 type AttackResponse = {
   success: boolean
 
@@ -124,7 +129,7 @@ type AttackResponse = {
 
   fraud_label: number
 
-  transaction: Record<string, any>
+  transaction: Transaction
 
   signals: Signals
 
