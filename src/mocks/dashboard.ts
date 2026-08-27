@@ -2,6 +2,7 @@ import type { Attack, DetectionResult, Transaction } from "@/types/fraud"
 
 export const mockTransaction: Transaction = {
   id: "txn_8F4A2C91",
+  userId: "usr_2C19F7",
   amount: 2840.5,
   currency: "USD",
   device: "Chrome / macOS",
@@ -11,25 +12,28 @@ export const mockTransaction: Transaction = {
 }
 
 export const mockAttacks: Attack[] = [
-  { id: "atk-0192", type: "Account Takeover", agent: "ATK-07 / Specter", description: "Credential reuse with a new device fingerprint", riskScore: 94, action: "BLOCK", createdAt: "2 min ago" },
-  { id: "atk-0191", type: "Velocity Fraud", agent: "VEL-03 / Pulse", description: "Burst of low-value authorizations across cards", riskScore: 78, action: "HOLD", createdAt: "8 min ago" },
-  { id: "atk-0190", type: "Behavioral Mimicry", agent: "BHV-11 / Echo", description: "Learned customer rhythm with a location mismatch", riskScore: 61, action: "VERIFY", createdAt: "14 min ago" },
-  { id: "atk-0189", type: "Transaction Splitting", agent: "SPL-02 / Shard", description: "Four linked payments below the review threshold", riskScore: 52, action: "VERIFY", createdAt: "21 min ago" },
+  { id: "txn_8F4A2C91", type: "Account Takeover", agent: "ATK-07 / Specter", userId: "usr_2C19F7", amount: 2840.5, description: "Credential reuse with a new device fingerprint", riskScore: 94, action: "CRITICAL_BLOCK", createdAt: "2 min ago" },
+  { id: "txn_5B21E043", type: "Velocity Fraud", agent: "VEL-03 / Pulse", userId: "usr_98A4D1", amount: 412.0, description: "Burst of low-value authorizations across cards", riskScore: 78, action: "FLAG", createdAt: "8 min ago" },
+  { id: "txn_1C77F9A2", type: "Behavioral Mimicry", agent: "BHV-11 / Echo", userId: "usr_5E3B90", amount: 1190.25, description: "Learned customer rhythm with a location mismatch", riskScore: 61, action: "FLAG", createdAt: "14 min ago" },
+  { id: "txn_04D8B6C5", type: "Transaction Splitting", agent: "SPL-02 / Shard", userId: "usr_71F2AC", amount: 899.99, description: "Four linked payments below the review threshold", riskScore: 52, action: "FLAG", createdAt: "21 min ago" },
+  { id: "txn_E2A93F10", type: "Novelty / Zero-Day", agent: "NOV-01 / Cipher", userId: "usr_3B8C22", amount: 64.5, description: "Unrecognized pattern cleared by consensus review", riskScore: 18, action: "ALLOW", createdAt: "27 min ago" },
 ]
 
 export const mockDetectionResult: DetectionResult = {
   transaction: mockTransaction,
   detectorScores: [
-    { label: "Rule Engine", score: 83, band: "high" },
-    { label: "ML Model", score: 76, band: "high" },
-    { label: "RAG Reasoner", score: 69, band: "medium" },
-    { label: "Graph Engine", score: 72, band: "high" },
+    { label: "Layer 1 · Rules", score: 83, band: "high" },
+    { label: "Layer 2 · LLM Class", score: 76, band: "high" },
+    { label: "Layer 3 · LLM Anomaly", score: 69, band: "medium" },
+    { label: "Layer 4 · Graph", score: 72, band: "high" },
+    { label: "Layer 5 · RAG", score: 65, band: "medium" },
   ],
   finalRiskScore: 78,
-  action: "HOLD",
-  explanation: "The transaction diverges from the customer’s normal device and location profile. Seven attempts in ten minutes also connect this activity to a known velocity pattern. The ensemble recommends a temporary hold while identity is verified.",
+  action: "FLAG",
+  explanation: "The transaction diverges from the customer’s normal device and location profile. Seven attempts in ten minutes also connect this activity to a known velocity pattern. The ensemble recommends flagging the transaction while identity is verified.",
 }
 
 export function getDashboardSnapshot() {
-  return { transactions: 12847, fraudDetected: 342, attacksRun: 86, averageRiskScore: 43.8, detectionRate: 96.4, falsePositiveRate: 1.8, currentAgent: "ATK-07 / Specter", recentThreats: mockAttacks }
+  const activeAlerts = mockAttacks.filter((attack) => attack.action !== "ALLOW").length
+  return { totalAnalyzed: 12847, fraudDetected: 342, attacksRun: 86, averageRiskScore: 43.8, detectionRate: 96.4, falsePositiveRate: 1.8, activeAlerts, currentAgent: "ATK-07 / Specter", recentThreats: mockAttacks }
 }

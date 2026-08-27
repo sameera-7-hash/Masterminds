@@ -153,7 +153,70 @@
   .bg-slate-800 { background-color: #27272a; }
 
 .dashboard-shell {
+  position: relative;
   background-image: radial-gradient(circle at 78% 0%, rgb(79 70 229 / 0.12), transparent 34%), radial-gradient(circle at 20% 100%, rgb(30 27 75 / 0.16), transparent 38%);
+}
+
+.cyber-grid-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.cyber-grid-node {
+  fill: #818cf8;
+  animation: cyber-node-pulse 3.4s ease-in-out infinite;
+}
+
+.cyber-grid-link {
+  stroke: #6366f1;
+  stroke-width: 1;
+  stroke-dasharray: 3 7;
+  opacity: 0.22;
+  animation: cyber-link-flow 5s linear infinite;
+}
+
+.cyber-grid-ring {
+  fill: none;
+  stroke: #818cf8;
+  stroke-width: 1;
+  opacity: 0;
+  transform-origin: 1220px 180px;
+  animation: cyber-ring-pulse 4.5s ease-out infinite;
+}
+
+.cyber-grid-sweep {
+  stroke: #a5b4fc;
+  stroke-width: 1.5;
+  opacity: 0.5;
+}
+
+.cyber-grid-radar {
+  animation: cyber-radar-rotate 18s linear infinite;
+}
+
+.radar-sweep-spin {
+  animation: radar-sweep-rotate 1.6s linear infinite;
+}
+
+/* A small pulsing ring around a status dot — used for "live" indicators app-wide. */
+.status-pulse {
+  position: relative;
+  display: inline-flex;
+}
+
+.status-pulse::before {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 9999px;
+  background: currentColor;
+  opacity: 0.5;
+  animation: cyber-status-ping 2.2s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 .security-hero {
@@ -233,10 +296,18 @@
 @keyframes status-threat { 0%, 35% { display: none; opacity: 0; } 36%, 70% { display: inline; opacity: 1; } 71%, 100% { display: none; opacity: 0; } }
 @keyframes status-verified { 0%, 70% { display: none; opacity: 0; } 71%, 100% { display: inline; opacity: 1; } }
 @keyframes scan-beam { 0% { top: 0%; opacity: 0; } 10% { opacity: 1; } 50% { top: 100%; opacity: 1; } 60% { opacity: 0; } 100% { top: 100%; opacity: 0; } }
+@keyframes cyber-node-pulse { 0%, 100% { opacity: 0.35; r: 2; } 50% { opacity: 1; r: 3.2; } }
+@keyframes cyber-link-flow { to { stroke-dashoffset: -40; } }
+@keyframes cyber-ring-pulse { 0% { opacity: 0.6; transform: scale(0.6); } 100% { opacity: 0; transform: scale(1.15); } }
+@keyframes cyber-radar-rotate { to { transform: rotate(360deg); } }
+@keyframes cyber-status-ping { 0% { transform: scale(1); opacity: 0.5; } 100% { transform: scale(2.2); opacity: 0; } }
+@keyframes radar-sweep-rotate { to { transform: rotate(360deg); } }
 
 @media (prefers-reduced-motion: reduce) {
   .dashboard-float, .hero-reveal, .scan-progress, .risk-score, .scan-status span, .scan-beam { animation: none; }
   .scan-progress { transform: scaleX(1); }
   .scan-status .status-scanning { display: inline; }
   .scan-beam { display: none; }
+  .cyber-grid-node, .cyber-grid-link, .cyber-grid-ring, .cyber-grid-radar, .status-pulse::before, .radar-sweep-spin { animation: none; }
+  .cyber-grid-bg { display: none; }
 }

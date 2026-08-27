@@ -5,11 +5,12 @@ export type AttackType =
   | "Transaction Splitting"
   | "Novelty / Zero-Day"
 
-export type ThreatAction = "BLOCK" | "HOLD" | "VERIFY" | "ALLOW"
+export type ThreatAction = "ALLOW" | "FLAG" | "CRITICAL_BLOCK"
 export type RiskBand = "low" | "medium" | "high"
 
 export interface Transaction {
   id: string
+  userId: string
   amount: number
   currency: string
   device: string
@@ -22,6 +23,8 @@ export interface Attack {
   id: string
   type: AttackType
   agent: string
+  userId: string
+  amount: number
   description: string
   riskScore: number
   action: ThreatAction
