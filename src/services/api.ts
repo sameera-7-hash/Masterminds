@@ -6,9 +6,11 @@ import type { Transaction as UiTransaction, ThreatAction } from "@/types/fraud"
 const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8011"
 
 // blue_team_api.py has no chat/RAG/feedback routes - those live only in the separate
-// blue_team_fraud_engine service. Fixed local dev port: 8012 (see
-// blue_team_fraud_engine/start.bat).
-const CHAT_API_BASE_URL = import.meta.env.VITE_CHAT_API_BASE_URL ?? "http://localhost:8012"
+// blue_team_fraud_engine service (LLM-native: Claude classification + Claude anomaly +
+// graph + RAG, contract confirmed against its live /openapi.json). Falls back to the
+// deployed instance so the chatbot works with zero local setup; override with
+// VITE_CHAT_API_BASE_URL to point at a locally-run `uvicorn` instance instead.
+const CHAT_API_BASE_URL = import.meta.env.VITE_CHAT_API_BASE_URL || "https://fraudshield-chatbot.onrender.com"
 
 async function request<T>(baseUrl: string, path: string, options: RequestInit): Promise<T> {
   const response = await fetch(`${baseUrl}${path}`, {
@@ -172,14 +174,17 @@ export interface FeedbackPayload {
   notes: string
 }
 
-export interface FeedbackResponse {
-  success: boolean
-  message?: string
-}
-
+// blue_team_fraud_engine's /api/feedback expects { txn_id, is_fraud, analyst_notes } and
+// its success schema isn't typed in its own OpenAPI doc (probing it returns a 502 until
+// the backend's Pinecone key is configured) - so this only maps the request shape and
+// leaves the response as whatever comes back rather than assuming a field that may not exist.
 export function submitFeedback(payload: FeedbackPayload) {
-  return request<FeedbackResponse>(CHAT_API_BASE_URL, "/api/feedback", {
+  return request<unknown>(CHAT_API_BASE_URL, "/api/feedback", {
     method: "POST",
-    body: JSON.stringify(payload),
+    body: JSON.stringify({
+      txn_id: payload.txnId,
+      is_fraud: payload.verdict === "CONFIRMED_FRAUD",
+      analyst_notes: payload.notes,
+    }),
   })
 }
