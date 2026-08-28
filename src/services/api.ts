@@ -1,9 +1,10 @@
 import type { Transaction as UiTransaction, ThreatAction } from "@/types/fraud"
 
-// The classical ML Blue Team API (red-team01/sentinelpay/blue_team_api.py). Fixed
-// local dev port: 8011 (see red-team01/sentinelpay/start.bat). Override with
-// VITE_API_BASE_URL to point elsewhere (e.g. the hosted deployment).
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "http://localhost:8011"
+// The classical ML Blue Team API (red-team01/sentinelpay/blue_team_api.py), deployed at
+// blueteam01.onrender.com. Falls back to it so the app works with zero local setup;
+// override with VITE_API_BASE_URL to point at a locally-run instance instead
+// (local dev port: 8011, see red-team01/sentinelpay/start.bat).
+const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://blueteam01.onrender.com"
 
 // blue_team_api.py has no chat/RAG/feedback routes - those live only in the separate
 // blue_team_fraud_engine service (LLM-native: Claude classification + Claude anomaly +
