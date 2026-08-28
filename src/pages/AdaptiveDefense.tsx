@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Reveal, RevealItem, RevealStagger } from "@/components/motion/Reveal"
 import { mockTransaction } from "@/mocks/dashboard"
-import { submitFeedback, type FeedbackVerdict } from "@/services/api"
+import { CHAT_API_BASE_URL, submitFeedback, type FeedbackVerdict } from "@/services/api"
 import { cn } from "@/lib/utils"
 
 const steps = [
@@ -97,7 +97,7 @@ function FeedbackForm() {
           )}
           {status === "error" && (
             <div className="flex items-start gap-2 border border-amber-500/30 bg-amber-500/5 px-3.5 py-2.5 text-xs text-amber-200">
-              <AlertTriangle className="mt-0.5 size-3.5 shrink-0" /> Feedback backend unreachable at localhost:8000 ({errorMessage}).
+              <AlertTriangle className="mt-0.5 size-3.5 shrink-0" /> Feedback backend unreachable at <span className="font-mono">{CHAT_API_BASE_URL}</span> ({errorMessage}).
             </div>
           )}
         </form>

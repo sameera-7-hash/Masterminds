@@ -35,6 +35,7 @@ import {
 import { RadarSweep } from "@/components/motion/RadarSweep"
 
 import { useRedTeamSync, type SyncedAttackType } from "@/contexts/redTeamSync"
+import { API_BASE } from "@/services/api"
 
 import type { RiskBand } from "@/types/fraud"
 
@@ -319,7 +320,7 @@ export function RedTeamLab() {
 
             {!analyzing && !blueTeamLayers && syncError && (
               <p className="py-6 text-center text-sm text-red-300/80">
-                The synthetic transaction couldn't reach the Blue Team analysis backend. Check that it's running at localhost:8000.
+                The synthetic transaction couldn't reach the Blue Team analysis backend at <span className="font-mono">{API_BASE}</span>. {syncError}
               </p>
             )}
 

@@ -4,14 +4,14 @@ import type { Transaction as UiTransaction, ThreatAction } from "@/types/fraud"
 // blueteam01.onrender.com. Falls back to it so the app works with zero local setup;
 // override with VITE_API_BASE_URL to point at a locally-run instance instead
 // (local dev port: 8011, see red-team01/sentinelpay/start.bat).
-const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://blueteam01.onrender.com"
+export const API_BASE = import.meta.env.VITE_API_BASE_URL || "https://blueteam01.onrender.com"
 
 // blue_team_api.py has no chat/RAG/feedback routes - those live only in the separate
 // blue_team_fraud_engine service (LLM-native: Claude classification + Claude anomaly +
 // graph + RAG, contract confirmed against its live /openapi.json). Falls back to the
 // deployed instance so the chatbot works with zero local setup; override with
 // VITE_CHAT_API_BASE_URL to point at a locally-run `uvicorn` instance instead.
-const CHAT_API_BASE_URL = import.meta.env.VITE_CHAT_API_BASE_URL || "https://fraudshield-chatbot.onrender.com"
+export const CHAT_API_BASE_URL = import.meta.env.VITE_CHAT_API_BASE_URL || "https://fraudshield-chatbot.onrender.com"
 
 async function request<T>(baseUrl: string, path: string, options: RequestInit): Promise<T> {
   const response = await fetch(`${baseUrl}${path}`, {
