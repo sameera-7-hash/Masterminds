@@ -1,8 +1,9 @@
 import { useState, type FormEvent } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { motion } from "framer-motion"
-import { ArrowLeft, Check, Fingerprint, Lock, Mail, ShieldCheck, Sparkles } from "lucide-react"
+import { AlertTriangle, ArrowLeft, Check, Fingerprint, Lock, Mail, ShieldCheck, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { supabase } from "@/lib/supabase"
 
 const highlights = [
   { label: "Real-time signal fusion", detail: "40+ risk signals scored in under 200ms" },
@@ -14,12 +15,39 @@ export function SignIn() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const [mode, setMode] = useState<"signin" | "signup">(searchParams.get("mode") === "signup" ? "signup" : "signin")
+  const [name, setName] = useState("")
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [submitting, setSubmitting] = useState(false)
+  const [error, setError] = useState("")
+  const [notice, setNotice] = useState("")
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    setError("")
+    setNotice("")
     setSubmitting(true)
-    window.setTimeout(() => navigate("/command-center"), 650)
+
+    if (mode === "signup") {
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: name } },
+      })
+      setSubmitting(false)
+      if (signUpError) return setError(signUpError.message)
+      // With email confirmation enabled (Supabase's default), sign-up succeeds but
+      // returns no session until the user clicks the confirmation link - so there's
+      // nothing to navigate into yet.
+      if (!data.session) return setNotice("Account created. Check your email to confirm it before signing in.")
+      navigate("/command-center")
+      return
+    }
+
+    const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
+    setSubmitting(false)
+    if (signInError) return setError(signInError.message)
+    navigate("/command-center")
   }
 
   return (
@@ -79,14 +107,14 @@ export function SignIn() {
           <div className="mb-8 flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] p-1">
             <button
               type="button"
-              onClick={() => setMode("signin")}
+              onClick={() => { setMode("signin"); setError(""); setNotice("") }}
               className={cn("flex-1 rounded-full px-4 py-2 text-sm font-medium transition-colors", mode === "signin" ? "bg-white text-[#0a0a0f]" : "text-white/50 hover:text-white")}
             >
               Sign in
             </button>
             <button
               type="button"
-              onClick={() => setMode("signup")}
+              onClick={() => { setMode("signup"); setError(""); setNotice("") }}
               className={cn("flex-1 rounded-full px-4 py-2 text-sm font-medium transition-colors", mode === "signup" ? "bg-white text-[#0a0a0f]" : "text-white/50 hover:text-white")}
             >
               Create account
@@ -104,7 +132,7 @@ export function SignIn() {
                 <label htmlFor="name" className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/40">Full name</label>
                 <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 transition-colors focus-within:border-indigo-400/60">
                   <Fingerprint className="size-4 text-white/30" />
-                  <input id="name" type="text" required placeholder="Jordan Ellis" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
+                  <input id="name" type="text" required value={name} onChange={(event) => setName(event.target.value)} placeholder="Jordan Ellis" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
                 </div>
               </div>
             )}
@@ -112,7 +140,7 @@ export function SignIn() {
               <label htmlFor="email" className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/40">Work email</label>
               <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 transition-colors focus-within:border-indigo-400/60">
                 <Mail className="size-4 text-white/30" />
-                <input id="email" type="email" required placeholder="you@company.com" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
+                <input id="email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
               </div>
             </div>
             <div>
@@ -122,9 +150,22 @@ export function SignIn() {
               </div>
               <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 transition-colors focus-within:border-indigo-400/60">
                 <Lock className="size-4 text-white/30" />
-                <input id="password" type="password" required placeholder="••••••••••" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
+                <input id="password" type="password" required minLength={6} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="••••••••••" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
               </div>
             </div>
+
+            {error && (
+              <div className="flex items-start gap-2 rounded-xl border border-red-500/30 bg-red-500/10 px-3.5 py-2.5 text-xs text-red-300">
+                <AlertTriangle className="mt-0.5 size-3.5 shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+            {notice && (
+              <div className="flex items-start gap-2 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3.5 py-2.5 text-xs text-emerald-300">
+                <Check className="mt-0.5 size-3.5 shrink-0" />
+                <span>{notice}</span>
+              </div>
+            )}
 
             <button
               type="submit"
@@ -137,7 +178,7 @@ export function SignIn() {
 
           <p className="mt-8 text-center text-xs text-white/35">
             {mode === "signin" ? "New to FraudShield? " : "Already have an account? "}
-            <button type="button" onClick={() => setMode(mode === "signin" ? "signup" : "signin")} className="font-medium text-indigo-300 hover:text-indigo-200">
+            <button type="button" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); setNotice("") }} className="font-medium text-indigo-300 hover:text-indigo-200">
               {mode === "signin" ? "Create an account" : "Sign in"}
             </button>
           </p>
