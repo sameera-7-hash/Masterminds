@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { motion } from "framer-motion"
-import { AlertTriangle, ArrowLeft, Check, Fingerprint, Lock, Mail, ShieldCheck, Sparkles } from "lucide-react"
+import { AlertTriangle, ArrowLeft, Check, Eye, EyeOff, Fingerprint, Loader2, Lock, Mail, ShieldCheck, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { supabase } from "@/lib/supabase"
 
@@ -18,6 +18,7 @@ export function SignIn() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState("")
   const [notice, setNotice] = useState("")
@@ -138,7 +139,7 @@ export function SignIn() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mx-auto w-full max-w-sm"
+          className="mx-auto w-full max-w-sm rounded-3xl border border-white/10 bg-white/[0.02] p-7 shadow-[0_30px_80px_-30px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:p-8"
         >
           <div className="mb-8 flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] p-1">
             <button
@@ -186,7 +187,10 @@ export function SignIn() {
               </div>
               <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 transition-colors focus-within:border-indigo-400/60">
                 <Lock className="size-4 text-white/30" />
-                <input id="password" type="password" required minLength={6} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="••••••••••" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
+                <input id="password" type={showPassword ? "text" : "password"} required minLength={6} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="••••••••••" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
+                <button type="button" onClick={() => setShowPassword((v) => !v)} className="text-white/30 transition-colors hover:text-white/60" aria-label={showPassword ? "Hide password" : "Show password"}>
+                  {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                </button>
               </div>
             </div>
 
@@ -206,8 +210,9 @@ export function SignIn() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#0a0a0f] transition-transform hover:-translate-y-0.5 disabled:pointer-events-none disabled:opacity-60"
+              className="mt-2 inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#0a0a0f] shadow-[0_10px_30px_-12px_rgba(255,255,255,0.3)] transition-all hover:-translate-y-0.5 hover:shadow-[0_14px_36px_-12px_rgba(255,255,255,0.4)] disabled:pointer-events-none disabled:opacity-60"
             >
+              {submitting && <Loader2 className="size-4 animate-spin" />}
               {submitting ? "Verifying..." : mode === "signin" ? "Sign in" : "Create account"}
             </button>
           </form>

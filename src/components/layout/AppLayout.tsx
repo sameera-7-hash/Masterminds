@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { AnimatePresence, motion } from "framer-motion"
-import { Activity, Bot, Crosshair, LogOut, MessageSquareText, Radar, ShieldCheck, TerminalSquare, Users } from "lucide-react"
+import { Activity, Bot, Crosshair, LogOut, MessageSquareText, Radar, ShieldCheck, TerminalSquare, TrendingUp, Users } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { CyberGrid } from "@/components/motion/CyberGrid"
 import { RedTeamSyncProvider } from "@/contexts/RedTeamSyncContext"
@@ -28,6 +28,7 @@ const navigation = [
   { label: "Blue Team Analysis", to: "/blue-team", icon: ShieldCheck },
   { label: "Adaptive Defense", to: "/adaptive", icon: Activity },
   { label: "Threat Analyzer", to: "/threat-analyzer", icon: MessageSquareText },
+  { label: "Analytics", to: "/analytics", icon: TrendingUp },
   { label: "Team", to: "/team", icon: Users },
 ]
 
