@@ -10,10 +10,13 @@ const signals = [
   { label: "Login anomaly", detail: "New device fingerprint", tone: "warning" },
 ]
 
-const navLinks = [
-  { label: "Command Center", to: "/command-center" },
-  { label: "Red Team Lab", to: "/red-team" },
-  { label: "Blue Team Analysis", to: "/blue-team" },
+// The dashboard itself (Command Center, Red/Blue Team) is behind a Supabase login
+// now, so the marketing nav no longer links straight into it - that would just dead-end
+// on a sign-in redirect. These point at in-page sections and the public story page instead.
+const navLinks: Array<{ label: string; href: string } | { label: string; to: string }> = [
+  { label: "Product", href: "#product" },
+  { label: "Impact", href: "#impact" },
+  { label: "About", to: "/about" },
 ]
 
 export function SecurityHero() {
@@ -31,9 +34,13 @@ export function SecurityHero() {
             FraudShield
           </Link>
           <div className="hidden items-center gap-1 rounded-full border border-white/5 bg-white/[0.03] p-1 md:flex">
-            {navLinks.map(({ label, to }) => (
-              <Link key={to} to={to} className="rounded-full px-4 py-1.5 text-[13px] font-medium text-white/60 transition-colors hover:bg-white/8 hover:text-white">
-                {label}
+            {navLinks.map((link) => "href" in link ? (
+              <a key={link.href} href={link.href} className="rounded-full px-4 py-1.5 text-[13px] font-medium text-white/60 transition-colors hover:bg-white/8 hover:text-white">
+                {link.label}
+              </a>
+            ) : (
+              <Link key={link.to} to={link.to} className="rounded-full px-4 py-1.5 text-[13px] font-medium text-white/60 transition-colors hover:bg-white/8 hover:text-white">
+                {link.label}
               </Link>
             ))}
           </div>
@@ -47,7 +54,7 @@ export function SecurityHero() {
           </div>
         </motion.nav>
 
-        <section className="security-hero scan-grid relative mt-6 overflow-hidden rounded-[32px] border border-white/10">
+        <section id="product" className="security-hero scan-grid relative mt-6 scroll-mt-6 overflow-hidden rounded-[32px] border border-white/10">
           <div className="scan-beam" />
           <div className="relative z-10 grid items-center gap-14 px-6 py-16 lg:grid-cols-[0.85fr_1.15fr] lg:px-14 lg:py-24">
             <div className="relative z-10 max-w-xl">
@@ -69,11 +76,11 @@ export function SecurityHero() {
               </Reveal>
               <Reveal delay={0.3}>
                 <div className="mt-9 flex flex-wrap items-center gap-4">
-                  <Link to="/command-center" className="group inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#0a0a0f] transition-transform hover:-translate-y-0.5">
+                  <Link to="/preview" className="group inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#0a0a0f] transition-transform hover:-translate-y-0.5">
                     See the command center <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
                   </Link>
-                  <Link to="/sign-in" className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/80 transition-colors hover:border-white/30 hover:text-white">
-                    See what changes
+                  <Link to="/about" className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/80 transition-colors hover:border-white/30 hover:text-white">
+                    See how it works
                   </Link>
                 </div>
               </Reveal>
@@ -130,18 +137,20 @@ export function SecurityHero() {
           </div>
         </section>
 
-        <RevealStagger className="mt-10 grid gap-4 border-t border-white/5 pt-8 pb-16 sm:grid-cols-3">
-          {[
-            { label: "False positives cut", value: "-62%" },
-            { label: "Signals fused per decision", value: "40+" },
-            { label: "Median decision time", value: "180ms" },
-          ].map(({ label, value }) => (
-            <RevealItem key={label} className="rounded-2xl border border-white/8 bg-white/[0.02] px-5 py-4">
-              <p className="text-2xl font-semibold tracking-tight text-white">{value}</p>
-              <p className="mt-1 text-xs text-white/40">{label}</p>
-            </RevealItem>
-          ))}
-        </RevealStagger>
+        <div id="impact" className="scroll-mt-24">
+          <RevealStagger className="mt-10 grid gap-4 border-t border-white/5 pt-8 pb-16 sm:grid-cols-3">
+            {[
+              { label: "False positives cut", value: "-62%" },
+              { label: "Signals fused per decision", value: "40+" },
+              { label: "Median decision time", value: "180ms" },
+            ].map(({ label, value }) => (
+              <RevealItem key={label} className="rounded-2xl border border-white/8 bg-white/[0.02] px-5 py-4">
+                <p className="text-2xl font-semibold tracking-tight text-white">{value}</p>
+                <p className="mt-1 text-xs text-white/40">{label}</p>
+              </RevealItem>
+            ))}
+          </RevealStagger>
+        </div>
       </div>
     </main>
   )
