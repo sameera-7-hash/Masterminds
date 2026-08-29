@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react"
+import { useEffect, useState, type FormEvent } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { motion } from "framer-motion"
 import { AlertTriangle, ArrowLeft, Check, Fingerprint, Lock, Mail, ShieldCheck, Sparkles } from "lucide-react"
@@ -21,6 +21,23 @@ export function SignIn() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState("")
   const [notice, setNotice] = useState("")
+  const [checkingSession, setCheckingSession] = useState(true)
+
+  // Clicking the email confirmation link lands back here with a session already
+  // established (Supabase parses it from the URL automatically) - so this picks that
+  // up and moves on instead of showing a blank sign-in form to someone who just
+  // confirmed their account. Also covers the ordinary case of an already-signed-in
+  // visitor landing on this page directly.
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data }) => {
+      if (data.session) navigate("/command-center")
+      else setCheckingSession(false)
+    })
+    const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session) navigate("/command-center")
+    })
+    return () => listener.subscription.unsubscribe()
+  }, [navigate])
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -32,7 +49,18 @@ export function SignIn() {
       const { data, error: signUpError } = await supabase.auth.signUp({
         email,
         password,
-        options: { data: { full_name: name } },
+        options: {
+          data: { full_name: name },
+          // The confirmation link gets opened from an email client, often on a
+          // different device than the one sign-up happened on - so it must always
+          // point at the real deployed domain, never window.location.origin (that
+          // would bake in "localhost" whenever someone tests sign-up locally, which
+          // is useless from any other device). VITE_SITE_URL must also be added to
+          // Authentication -> URL Configuration -> Redirect URLs in the Supabase
+          // dashboard, or Supabase rejects it and falls back to whatever "Site URL"
+          // is configured there instead.
+          emailRedirectTo: `${import.meta.env.VITE_SITE_URL || window.location.origin}/sign-in`,
+        },
       })
       setSubmitting(false)
       if (signUpError) return setError(signUpError.message)
@@ -48,6 +76,14 @@ export function SignIn() {
     setSubmitting(false)
     if (signInError) return setError(signInError.message)
     navigate("/command-center")
+  }
+
+  if (checkingSession) {
+    return (
+      <main className="flex min-h-svh items-center justify-center bg-[#05050a] font-mono text-xs text-slate-500">
+        VERIFYING SESSION...
+      </main>
+    )
   }
 
   return (
