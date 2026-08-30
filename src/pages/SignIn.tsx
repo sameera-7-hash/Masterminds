@@ -1,14 +1,21 @@
 import { useEffect, useState, type FormEvent } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { motion } from "framer-motion"
-import { AlertTriangle, ArrowLeft, Check, Eye, EyeOff, Fingerprint, Loader2, Lock, Mail, ShieldCheck, Sparkles } from "lucide-react"
+import { AlertTriangle, ArrowLeft, Check, Eye, EyeOff, Fingerprint, KeyRound, Loader2, Lock, Mail, ShieldCheck, Sparkles } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { supabase } from "@/lib/supabase"
+import { CyberGrid } from "@/components/motion/CyberGrid"
 
 const highlights = [
   { label: "Real-time signal fusion", detail: "40+ risk signals scored in under 200ms" },
   { label: "Adaptive defense loop", detail: "Missed attacks retrain the ensemble automatically" },
   { label: "Zero standing trust", detail: "Every session is continuously re-verified" },
+]
+
+const trustBadges = [
+  { icon: ShieldCheck, label: "SOC 2 Type II" },
+  { icon: Lock, label: "256-bit encryption" },
+  { icon: KeyRound, label: "SSO / MFA ready" },
 ]
 
 export function SignIn() {
@@ -130,8 +137,11 @@ export function SignIn() {
         <p className="relative z-10 text-xs text-indigo-100/40">Trusted signal, clear decisions, fewer false positives.</p>
       </div>
 
-      <div className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-16 xl:px-20">
-        <Link to="/" className="mb-10 inline-flex w-fit items-center gap-2 text-xs font-medium text-white/40 transition-colors hover:text-white/70 lg:hidden">
+      <div className="relative flex flex-col justify-center overflow-hidden px-6 py-12 sm:px-12 lg:px-16 xl:px-20">
+        <CyberGrid className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-[0.07]" />
+        <div className="pointer-events-none absolute -right-32 top-1/3 z-0 size-96 rounded-full bg-indigo-500/10 blur-3xl" />
+
+        <Link to="/" className="relative z-10 mb-10 inline-flex w-fit items-center gap-2 text-xs font-medium text-white/40 transition-colors hover:text-white/70 lg:hidden">
           <ArrowLeft className="size-3.5" /> Back to FraudShield
         </Link>
 
@@ -139,7 +149,7 @@ export function SignIn() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mx-auto w-full max-w-sm rounded-3xl border border-white/10 bg-white/[0.02] p-7 shadow-[0_30px_80px_-30px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:p-8"
+          className="relative z-10 mx-auto w-full max-w-sm rounded-3xl border border-white/10 bg-white/[0.02] p-7 shadow-[0_30px_80px_-30px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:p-8"
         >
           <div className="mb-8 flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] p-1">
             <button
@@ -223,6 +233,19 @@ export function SignIn() {
               {mode === "signin" ? "Create an account" : "Sign in"}
             </button>
           </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 mx-auto mt-8 flex w-full max-w-sm flex-wrap items-center justify-center gap-x-6 gap-y-2"
+        >
+          {trustBadges.map(({ icon: Icon, label }) => (
+            <span key={label} className="inline-flex items-center gap-1.5 text-xs text-white/30">
+              <Icon className="size-3.5" /> {label}
+            </span>
+          ))}
         </motion.div>
       </div>
     </main>

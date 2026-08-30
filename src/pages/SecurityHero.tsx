@@ -1,7 +1,7 @@
-import { Fragment, useEffect, useState } from "react"
+import { Fragment, useEffect, useRef, useState } from "react"
 import type { CSSProperties } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { motion } from "framer-motion"
+import { motion, useScroll, useSpring, useTransform } from "framer-motion"
 import {
   ArrowRight,
   Bot,
@@ -23,6 +23,7 @@ import { Line, LineChart, ResponsiveContainer } from "recharts"
 import { getAnalyticsData } from "@/api/analytics"
 import { Badge } from "@/components/ui/badge"
 import { Reveal, RevealItem, RevealStagger } from "@/components/motion/Reveal"
+import { TypingText } from "@/components/motion/TypingText"
 import { supabase } from "@/lib/supabase"
 import { REGULATORY_POINTS } from "@/lib/regulatory"
 
@@ -79,6 +80,15 @@ export function SecurityHero() {
   const [checkingSession, setCheckingSession] = useState(true)
   const [data, setData] = useState<Awaited<ReturnType<typeof getAnalyticsData>> | null>(null)
 
+  const { scrollYProgress } = useScroll()
+  const scrollProgress = useSpring(scrollYProgress, { stiffness: 220, damping: 32, restDelta: 0.001 })
+
+  const heroRef = useRef<HTMLElement>(null)
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] })
+  const heroCardY = useTransform(heroProgress, [0, 1], [0, 90])
+  const heroCopyY = useTransform(heroProgress, [0, 1], [0, -50])
+  const heroFade = useTransform(heroProgress, [0, 0.7], [1, 0])
+
   // A logged-in visitor lands on the dashboard, not the pitch page.
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -101,6 +111,10 @@ export function SecurityHero() {
 
   return (
     <main className="min-h-svh scroll-smooth overflow-hidden bg-[#05050a] text-white">
+      <motion.div
+        className="fixed inset-x-0 top-0 z-50 h-[3px] origin-left bg-gradient-to-r from-indigo-400 via-indigo-300 to-white"
+        style={{ scaleX: scrollProgress }}
+      />
       <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
         <motion.nav
           initial={{ opacity: 0, y: -16 }}
@@ -136,10 +150,10 @@ export function SecurityHero() {
         {/* ==================================================
             HERO
         ================================================== */}
-        <section id="product" className="security-hero scan-grid relative mt-6 scroll-mt-6 overflow-hidden rounded-[32px] border border-white/10">
+        <section ref={heroRef} id="product" className="security-hero scan-grid relative mt-6 scroll-mt-6 overflow-hidden rounded-[32px] border border-white/10">
           <div className="scan-beam" />
           <div className="relative z-10 grid items-center gap-14 px-6 py-16 lg:grid-cols-[0.85fr_1.15fr] lg:px-14 lg:py-24">
-            <div className="relative z-10 max-w-xl">
+            <motion.div style={{ y: heroCopyY, opacity: heroFade }} className="relative z-10 max-w-xl">
               <Reveal delay={0.05}>
                 <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-indigo-200">
                   <span className="size-1.5 rounded-full bg-indigo-300" />
@@ -148,7 +162,7 @@ export function SecurityHero() {
               </Reveal>
               <Reveal delay={0.14}>
                 <h1 className="hero-title text-5xl leading-[1.02] text-white sm:text-6xl lg:text-[3.9rem]">
-                  The fraud defense system that attacks itself before attackers do.
+                  <TypingText text="Stop fraud before it becomes a story." speed={22} startDelay={300} />
                 </h1>
               </Reveal>
               <Reveal delay={0.22}>
@@ -169,12 +183,13 @@ export function SecurityHero() {
               <Reveal delay={0.36}>
                 <p className="mt-6 text-sm text-indigo-100/45">Built for security teams</p>
               </Reveal>
-            </div>
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 24, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              style={{ y: heroCardY }}
               className="relative z-10 mx-auto w-full max-w-155"
             >
               <span className="absolute -top-4 left-6 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-[#0a0a12] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-indigo-200 shadow-lg">
