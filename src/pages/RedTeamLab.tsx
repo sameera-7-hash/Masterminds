@@ -4,6 +4,7 @@ import {
   ArrowRight,
   Bot,
   Check,
+  CreditCard,
   Crosshair,
   Fingerprint,
   Globe2,
@@ -56,7 +57,8 @@ const agents: Array<{
   { index: 3, name: "Behavioral Mimicry", code: "BHV-11", detail: "Customer rhythm simulation", icon: Radar },
   { index: 4, name: "Transaction Splitting", code: "SPL-02", detail: "Threshold evasion chains", icon: Split },
   { index: 5, name: "Novelty / Zero-Day", code: "NOV-01", detail: "Unknown attack surface", icon: Crosshair },
-  { index: 6, name: "Run Full Orchestrator", code: "AUTO-00", detail: "Multi-agent campaign", icon: Bot },
+  { index: 6, name: "Card Testing", code: "CRD-05", detail: "Card enumeration / testing", icon: CreditCard },
+  { index: 7, name: "Auto / Orchestrator", code: "AUTO-00", detail: "Multi-agent campaign", icon: Bot },
 ]
 
 
@@ -66,6 +68,12 @@ const agents: Array<{
 
 function bandFor(value: number): RiskBand {
   return value > 70 ? "high" : value > 40 ? "medium" : "low"
+}
+
+// The live Red Team API reports attack_type as e.g. "ACCOUNT_TAKEOVER" - this is only
+// for the campaign summary grid's raw per-scenario labels, not the curated agent list above.
+function prettifyAttackType(raw: string): string {
+  return raw.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, (c) => c.toUpperCase())
 }
 
 
@@ -105,6 +113,7 @@ export function RedTeamLab() {
   const blueTeamDecision = state.attackType === selected ? state.analysis?.decision : undefined
   const blueTeamExplanation = state.attackType === selected ? state.analysis?.explanation : undefined
   const syncError = state.attackType === selected ? state.error : ""
+  const orchestratorScenarios = state.attackType === selected ? state.orchestratorScenarios : null
 
   return (
     <div className="space-y-8">
@@ -250,6 +259,41 @@ export function RedTeamLab() {
           </Card>
         </Reveal>
       </div>
+
+      {/* ======================================================
+          MULTI-AGENT CAMPAIGN (Auto / Orchestrator)
+      ====================================================== */}
+
+      {orchestratorScenarios && (
+        <Reveal delay={0.22}>
+          <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+            <CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4">
+              <div>
+                <CardTitle className="text-sm font-medium text-slate-100">Multi-agent campaign</CardTitle>
+                <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-slate-600">{orchestratorScenarios.length} agents deployed against one synthetic user · most severe scenario synced to Blue Team below</p>
+              </div>
+              <Badge variant="outline" className="border-red-500/30 font-mono text-[10px] text-red-300">AUTO-00</Badge>
+            </CardHeader>
+            <CardContent className="grid gap-3 p-5 sm:grid-cols-2 lg:grid-cols-3">
+              {orchestratorScenarios.map((scenario, index) => {
+                const total = scenario.signals.amount_deviation + scenario.signals.device_anomaly + scenario.signals.location_anomaly + scenario.signals.time_anomaly + scenario.signals.velocity
+                const isHeadline = redTeamResult?.transaction === scenario.transaction
+                return (
+                  <div key={index} className={`border p-3 transition-colors ${isHeadline ? "border-red-500/50 bg-red-500/5" : "border-slate-800 bg-[#0a1019]"}`}>
+                    <div className="flex items-start justify-between gap-2">
+                      <p className="text-xs font-medium text-slate-200">{prettifyAttackType(scenario.attack_type)}</p>
+                      <Badge variant="outline" className={scenario.fraud_label ? "border-red-500/40 bg-red-500/10 text-red-300" : "border-emerald-500/40 bg-emerald-500/10 text-emerald-300"}>
+                        {scenario.fraud_label ? "FRAUD" : "CLEAN"}
+                      </Badge>
+                    </div>
+                    <p className="mt-2 font-mono text-[10px] text-slate-600">Avg signal {Math.round(total / 5)}/100</p>
+                  </div>
+                )
+              })}
+            </CardContent>
+          </Card>
+        </Reveal>
+      )}
 
       {/* ======================================================
           BLUE TEAM LIVE SYNC
