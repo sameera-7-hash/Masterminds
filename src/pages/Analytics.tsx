@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react"
-import { ArrowUpRight, Bell, CheckCircle2, ChevronDown, Download, Radio, ShieldAlert, ShieldCheck, TrendingUp } from "lucide-react"
+import { ArrowUpRight, CheckCircle2, ChevronDown, Download, Radio, ShieldAlert, ShieldCheck, TrendingUp } from "lucide-react"
 import {
   Area,
   AreaChart,
-  Bar,
-  BarChart,
   CartesianGrid,
   Cell,
   Legend,
@@ -140,7 +138,7 @@ export function Analytics() {
                       <CartesianGrid stroke={CHART.grid} vertical={false} />
                       <XAxis dataKey="label" tick={{ fill: CHART.axis, fontSize: 11 }} axisLine={{ stroke: CHART.grid }} tickLine={false} />
                       <YAxis domain={[50, 100]} unit="%" tick={{ fill: CHART.axis, fontSize: 11 }} axisLine={{ stroke: CHART.grid }} tickLine={false} width={48} />
-                      <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: "#e4e4e7" }} formatter={(value: number) => `${value.toFixed(1)}%`} />
+                      <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: "#e4e4e7" }} formatter={(value) => `${Number(value).toFixed(1)}%`} />
                       <Legend wrapperStyle={{ fontSize: 11, fontFamily: "ui-monospace, monospace", color: "#71717a" }} />
                       <Line type="monotone" dataKey="beforeAdaptive" name="Before Adaptive Defense" stroke={CHART.before} strokeWidth={2} strokeDasharray="6 4" dot={false} />
                       <Line type="monotone" dataKey="afterAdaptive" name="After Adaptive Defense" stroke={CHART.after} strokeWidth={2.5} dot={false} />
@@ -170,7 +168,7 @@ export function Analytics() {
                         <CartesianGrid stroke={CHART.grid} vertical={false} />
                         <XAxis dataKey="label" tick={{ fill: CHART.axis, fontSize: 11 }} axisLine={{ stroke: CHART.grid }} tickLine={false} />
                         <YAxis unit="%" tick={{ fill: CHART.axis, fontSize: 11 }} axisLine={{ stroke: CHART.grid }} tickLine={false} width={42} />
-                        <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: "#e4e4e7" }} formatter={(value: number) => `${value.toFixed(1)}%`} />
+                        <Tooltip contentStyle={tooltipStyle} labelStyle={{ color: "#e4e4e7" }} formatter={(value) => `${Number(value).toFixed(1)}%`} />
                         <Area type="monotone" dataKey="falsePositiveRate" name="False Positive Rate" stroke={CHART.falsePositive} strokeWidth={2} fill="url(#fpGradient)" dot={false} />
                       </AreaChart>
                     </ResponsiveContainer>

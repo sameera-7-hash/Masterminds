@@ -15,7 +15,6 @@ import {
   ShieldAlert,
   ShieldCheck,
   ShieldHalf,
-  Sparkles,
   Swords,
   TrendingUp,
   X,
