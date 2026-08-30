@@ -153,7 +153,7 @@ export function SecurityHero() {
         <section ref={heroRef} id="product" className="security-hero scan-grid relative mt-6 scroll-mt-6 overflow-hidden rounded-[32px] border border-white/10">
           <div className="scan-beam" />
           <div className="relative z-10 grid items-center gap-14 px-6 py-16 lg:grid-cols-[0.85fr_1.15fr] lg:px-14 lg:py-24">
-            <motion.div style={{ y: heroCopyY, opacity: heroFade }} className="relative z-10 max-w-xl">
+            <motion.div style={{ y: heroCopyY, opacity: heroFade }} className="relative z-10 min-w-0 max-w-xl">
               <Reveal delay={0.05}>
                 <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-indigo-200">
                   <span className="size-1.5 rounded-full bg-indigo-300" />
@@ -190,7 +190,7 @@ export function SecurityHero() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               style={{ y: heroCardY }}
-              className="relative z-10 mx-auto w-full max-w-155"
+              className="relative z-10 mx-auto w-full min-w-0 max-w-155"
             >
               <span className="absolute -top-4 left-6 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-[#0a0a12] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-indigo-200 shadow-lg">
                 <ShieldHalf className="size-3" /> Live feed
@@ -306,10 +306,10 @@ export function SecurityHero() {
           <Reveal>
             <div className="overflow-hidden rounded-[28px] border border-emerald-500/20 bg-gradient-to-br from-emerald-500/8 via-[#0d1520] to-[#0d1520]">
               <div className="grid gap-8 p-8 lg:grid-cols-[0.9fr_1.1fr] lg:p-12">
-                <div>
+                <div className="min-w-0">
                   <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-emerald-300">Quantified Impact</p>
                   {data ? (
-                    <div className="mt-4 flex items-end gap-3">
+                    <div className="mt-4 flex flex-wrap items-end gap-3">
                       <span className="text-6xl font-semibold tracking-tight text-white sm:text-7xl">+{data.adaptiveImprovement}%</span>
                       <span className="mb-2 flex items-center gap-1 text-sm font-medium text-emerald-400"><TrendingUp className="size-4" /> detection lift</span>
                     </div>
@@ -324,7 +324,7 @@ export function SecurityHero() {
                     <span className="ml-2 text-xs text-slate-500">Before adaptive defense → after adaptive defense</span>
                   </div>
                 </div>
-                <div className="h-48 w-full sm:h-56">
+                <div className="h-48 w-full min-w-0 sm:h-56">
                   {data && (
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={data.detectionTrend}>
