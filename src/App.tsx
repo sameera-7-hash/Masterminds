@@ -14,7 +14,7 @@ import { Team } from "@/pages/Team"
 import { ThreatAnalyzerChat } from "@/pages/ThreatAnalyzerChat"
 
 export function App() {
-  return <BrowserRouter><Routes><Route path="/" element={<SecurityHero />} /><Route path="/sign-in" element={<SignIn />} /><Route path="/about" element={<About />} /><Route path="/preview" element={<CommandCenterPreview />} /><Route element={<RequireAuth />}><Route element={<AppLayout />}><Route path="/command-center" element={<CommandCenter />} /><Route path="/red-team" element={<RedTeamLab />} /><Route path="/blue-team" element={<BlueTeamAnalysis />} /><Route path="/adaptive" element={<AdaptiveDefense />} /><Route path="/threat-analyzer" element={<ThreatAnalyzerChat />} /><Route path="/analytics" element={<Analytics />} /><Route path="/team" element={<Team />} /></Route></Route></Routes></BrowserRouter>
+  return <BrowserRouter><Routes><Route path="/" element={<SecurityHero />} /><Route path="/sign-in" element={<SignIn />} /><Route path="/about" element={<About />} /><Route path="/preview" element={<CommandCenterPreview />} /><Route path="/team" element={<Team />} /><Route element={<RequireAuth />}><Route element={<AppLayout />}><Route path="/command-center" element={<CommandCenter />} /><Route path="/red-team" element={<RedTeamLab />} /><Route path="/blue-team" element={<BlueTeamAnalysis />} /><Route path="/adaptive" element={<AdaptiveDefense />} /><Route path="/threat-analyzer" element={<ThreatAnalyzerChat />} /><Route path="/analytics" element={<Analytics />} /></Route></Route></Routes></BrowserRouter>
 }
 
 export default App

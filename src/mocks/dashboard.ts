@@ -1,3 +1,4 @@
+import { getAnalyticsSnapshot } from "@/mocks/analytics"
 import type { Attack, DetectionResult, Transaction } from "@/types/fraud"
 
 export const mockTransaction: Transaction = {
@@ -33,7 +34,11 @@ export const mockDetectionResult: DetectionResult = {
   explanation: "The transaction diverges from the customer’s normal device and location profile. Seven attempts in ten minutes also connect this activity to a known velocity pattern. The ensemble recommends flagging the transaction while identity is verified.",
 }
 
+// detectionRate and falsePositiveRate are read from the Analytics snapshot rather than
+// hardcoded here, so Command Center, Analytics, and the public landing page can never
+// silently drift apart and show two different numbers for the same metric in a demo.
 export function getDashboardSnapshot() {
   const activeAlerts = mockAttacks.filter((attack) => attack.action !== "ALLOW").length
-  return { totalAnalyzed: 12847, fraudDetected: 342, attacksRun: 86, averageRiskScore: 43.8, detectionRate: 96.4, falsePositiveRate: 1.8, activeAlerts, currentAgent: "ATK-07 / Specter", recentThreats: mockAttacks }
+  const { overallDetectionRate, falsePositiveRate } = getAnalyticsSnapshot()
+  return { totalAnalyzed: 12847, fraudDetected: 342, attacksRun: 86, averageRiskScore: 43.8, detectionRate: overallDetectionRate, falsePositiveRate, activeAlerts, currentAgent: "ATK-07 / Specter", recentThreats: mockAttacks }
 }

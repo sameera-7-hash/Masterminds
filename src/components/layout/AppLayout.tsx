@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link, NavLink, Outlet, useLocation, useNavigate } from "react-router-dom"
 import { AnimatePresence, motion } from "framer-motion"
-import { Activity, Bot, Crosshair, LogOut, MessageSquareText, Radar, ShieldCheck, TerminalSquare, TrendingUp, Users } from "lucide-react"
+import { Activity, Bot, Crosshair, LogOut, MessageSquareText, Radar, ShieldCheck, TerminalSquare, TrendingUp } from "lucide-react"
 import { Separator } from "@/components/ui/separator"
 import { CyberGrid } from "@/components/motion/CyberGrid"
 import { RedTeamSyncProvider } from "@/contexts/RedTeamSyncContext"
@@ -29,7 +29,6 @@ const navigation = [
   { label: "Adaptive Defense", to: "/adaptive", icon: Activity },
   { label: "Threat Analyzer", to: "/threat-analyzer", icon: MessageSquareText },
   { label: "Analytics", to: "/analytics", icon: TrendingUp },
-  { label: "Team", to: "/team", icon: Users },
 ]
 
 function Navigation({ compact = false }: { compact?: boolean }) {
@@ -53,7 +52,7 @@ export function AppLayout() {
     <CyberGrid className="cyber-grid-bg" />
     <aside className="fixed inset-y-0 left-0 z-20 hidden w-64 flex-col overflow-hidden border-r border-white/10 bg-[#111118] lg:flex">
       <div className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-72 bg-gradient-to-b from-indigo-500/10 via-transparent to-transparent" />
-      <Link to="/" className="group flex h-20 items-center gap-3 px-6 transition-colors hover:bg-white/5">
+      <Link to="/command-center" className="group flex h-20 items-center gap-3 px-6 transition-colors hover:bg-white/5">
         <div className="flex size-9 items-center justify-center rounded-xl border border-indigo-400/30 bg-gradient-to-br from-indigo-500/25 to-indigo-500/5 text-indigo-300 shadow-[0_0_20px_-6px_rgba(129,140,248,0.55)] transition-colors group-hover:border-indigo-400/60 group-hover:bg-indigo-500/20">
           <TerminalSquare className="size-5" />
         </div>

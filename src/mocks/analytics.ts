@@ -7,7 +7,7 @@ import type {
 } from "@/types/analytics"
 import type { AttackType } from "@/types/fraud"
 
-const ATTACK_TYPES: AttackType[] = [
+export const ATTACK_TYPES: AttackType[] = [
   "Account Takeover",
   "Velocity Fraud",
   "Behavioral Mimicry",

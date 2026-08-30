@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { ArrowUpRight, Bell, CheckCircle2, Download, Radio, ShieldAlert, TrendingUp } from "lucide-react"
+import { ArrowUpRight, Bell, CheckCircle2, ChevronDown, Download, Radio, ShieldAlert, ShieldCheck, TrendingUp } from "lucide-react"
 import {
   Area,
   AreaChart,
@@ -21,10 +21,12 @@ import { getAnalyticsData } from "@/api/analytics"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { AttackSimulationMap } from "@/components/motion/AttackSimulationMap"
 import { Counter } from "@/components/motion/Counter"
 import { Reveal, RevealItem, RevealStagger } from "@/components/motion/Reveal"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { downloadCsv } from "@/lib/csv"
+import { REGULATORY_POINTS } from "@/lib/regulatory"
 
 // Chart colors read from Tailwind v4's auto-generated palette variables (--color-*)
 // rather than hardcoded hex, so they stay in lockstep with the rest of the SOC theme.
@@ -51,6 +53,7 @@ function SkeletonBlock({ className = "" }: { className?: string }) {
 
 export function Analytics() {
   const [data, setData] = useState<Awaited<ReturnType<typeof getAnalyticsData>> | null>(null)
+  const [showRegulatory, setShowRegulatory] = useState(false)
   useEffect(() => { void getAnalyticsData().then(setData) }, [])
 
   const exportImpactLog = () => {
@@ -106,6 +109,21 @@ export function Analytics() {
               </RevealItem>
             ))}
           </RevealStagger>
+
+          <Reveal delay={0.06}>
+            <Card className="overflow-hidden border-cyan-500/20 bg-[#0d1520] shadow-none">
+              <CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4">
+                <div>
+                  <CardTitle className="text-sm font-medium text-slate-100">Simulated Attack Activity</CardTitle>
+                  <p className="mt-1 font-mono text-[10px] uppercase tracking-wider text-slate-600">Visualizing our own Red Team synthetic attack campaigns in real time.</p>
+                </div>
+                <Badge variant="outline" className="border-cyan-500/30 font-mono text-[10px] text-cyan-300">LIVE</Badge>
+              </CardHeader>
+              <CardContent className="p-0">
+                <AttackSimulationMap className="h-[360px] w-full sm:h-[440px]" />
+              </CardContent>
+            </Card>
+          </Reveal>
 
           <Reveal delay={0.1}>
             <Card className="border-slate-800 bg-[#0d1520] shadow-none">
@@ -228,6 +246,35 @@ export function Analytics() {
                   </Table>
                 </div>
               </CardContent>
+            </Card>
+          </Reveal>
+
+          <Reveal delay={0.3}>
+            <Card className="border-emerald-500/15 bg-[#0d1520] shadow-none">
+              <button
+                type="button"
+                onClick={() => setShowRegulatory((v) => !v)}
+                className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+              >
+                <div className="flex items-center gap-2.5">
+                  <ShieldCheck className="size-4 text-emerald-400" />
+                  <div>
+                    <CardTitle className="text-sm font-medium text-slate-100">Regulatory &amp; Privacy Notice</CardTitle>
+                    <p className="mt-0.5 font-mono text-[10px] uppercase tracking-wider text-slate-600">Built for real-world deployment</p>
+                  </div>
+                </div>
+                <ChevronDown className={`size-4 shrink-0 text-slate-500 transition-transform ${showRegulatory ? "rotate-180" : ""}`} />
+              </button>
+              {showRegulatory && (
+                <CardContent className="grid gap-3 border-t border-slate-800/80 p-5 sm:grid-cols-2">
+                  {REGULATORY_POINTS.map(({ icon: Icon, text }) => (
+                    <div key={text} className="flex items-start gap-3">
+                      <Icon className="mt-0.5 size-4 shrink-0 text-emerald-400" />
+                      <p className="text-sm text-slate-400">{text}</p>
+                    </div>
+                  ))}
+                </CardContent>
+              )}
             </Card>
           </Reveal>
         </>
