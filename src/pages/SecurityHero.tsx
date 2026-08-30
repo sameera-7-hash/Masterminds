@@ -120,11 +120,11 @@ export function SecurityHero() {
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center justify-between gap-4 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_20px_50px_-20px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:px-6"
+          className="flex items-center justify-between gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_20px_50px_-20px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:gap-4 sm:px-6 sm:py-2.5"
         >
-          <Link to="/" className="group flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white transition-opacity hover:opacity-80">
-            <span className="flex size-8 items-center justify-center rounded-full bg-indigo-500 text-white transition-transform duration-300 group-hover:scale-110"><ShieldCheck className="size-4" /></span>
-            FraudShield
+          <Link to="/" className="group flex items-center gap-1.5 text-xs font-semibold tracking-tight text-white transition-opacity hover:opacity-80 sm:gap-2.5 sm:text-sm">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white transition-transform duration-300 group-hover:scale-110 sm:size-8"><ShieldCheck className="size-3.5 sm:size-4" /></span>
+            <span className="whitespace-nowrap">FraudShield</span>
           </Link>
           <div className="hidden items-center gap-1 rounded-full border border-white/5 bg-white/[0.03] p-1 md:flex">
             {navLinks.map((link) => "href" in link ? (
@@ -137,11 +137,11 @@ export function SecurityHero() {
               </Link>
             ))}
           </div>
-          <div className="flex items-center gap-2">
-            <Link to="/sign-in" className="rounded-full px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/5 hover:text-white">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+            <Link to="/sign-in" className="whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs font-medium text-white/70 transition-colors hover:bg-white/5 hover:text-white sm:px-4 sm:py-2 sm:text-sm">
               Log in
             </Link>
-            <Link to="/sign-in?mode=signup" className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#0a0a0f] shadow-[0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-10px_rgba(255,255,255,0.35)]">
+            <Link to="/sign-in?mode=signup" className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white px-2.5 py-1.5 text-xs font-semibold text-[#0a0a0f] shadow-[0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-10px_rgba(255,255,255,0.35)] sm:px-4 sm:py-2 sm:text-sm">
               Sign up
             </Link>
           </div>
@@ -161,8 +161,8 @@ export function SecurityHero() {
                 </span>
               </Reveal>
               <Reveal delay={0.14}>
-                <h1 className="hero-title text-5xl leading-[1.02] text-white sm:text-6xl lg:text-[3.9rem]">
-                  <TypingText text="Stop fraud before it becomes a story." speed={22} startDelay={300} />
+                <h1 className="hero-title text-4xl leading-[1.05] text-white sm:text-5xl sm:leading-[1.02] lg:text-6xl xl:text-[3.9rem]">
+                  <TypingText text="Stop fraud before it becomes a story." speed={65} startDelay={300} startImmediately />
                 </h1>
               </Reveal>
               <Reveal delay={0.22}>

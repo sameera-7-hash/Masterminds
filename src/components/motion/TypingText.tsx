@@ -5,17 +5,23 @@ export function TypingText({
   text,
   className,
   cursorClassName,
-  speed = 28,
+  speed = 55,
   startDelay = 0,
+  startImmediately = false,
 }: {
   text: string
   className?: string
   cursorClassName?: string
   speed?: number
   startDelay?: number
+  /** Skip the scroll-into-view gate and start on mount — use for above-the-fold text, since
+   * IntersectionObserver-based triggers can be unreliable on mobile while the viewport height
+   * is still settling (address bar show/hide, dynamic svh) right after page load. */
+  startImmediately?: boolean
 }) {
   const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: true, margin: "-80px" })
+  const inViewResult = useInView(ref, { once: true, margin: "0px", amount: 0 })
+  const inView = startImmediately || inViewResult
   const [count, setCount] = useState(0)
 
   useEffect(() => {
