@@ -73,8 +73,8 @@ function bandFor(value: number): RiskBand {
 // Gives each of the 5 signal / layer bars its own shade instead of one flat color, so the
 // ensemble reads as distinct channels at a glance. Classes are spelled out in full (not built
 // with string interpolation) so Tailwind's static scanner can find each one and generate it.
-const signalBarColors = ["[&>div]:bg-red-300", "[&>div]:bg-red-400", "[&>div]:bg-rose-400", "[&>div]:bg-red-500", "[&>div]:bg-rose-500"]
-const layerBarColors = ["[&>div]:bg-sky-400", "[&>div]:bg-blue-400", "[&>div]:bg-blue-500", "[&>div]:bg-indigo-400", "[&>div]:bg-indigo-500"]
+const signalBarColors = ["[&>div]:bg-red-300", "[&>div]:bg-red-400", "[&>div]:bg-red-500", "[&>div]:bg-red-600", "[&>div]:bg-red-700"]
+const layerBarColors = ["[&>div]:bg-blue-300", "[&>div]:bg-blue-400", "[&>div]:bg-blue-500", "[&>div]:bg-blue-600", "[&>div]:bg-blue-700"]
 
 function agentBadgeClass(active: boolean): string {
   return `flex size-10 shrink-0 items-center justify-center rounded-lg border transition-colors ${
