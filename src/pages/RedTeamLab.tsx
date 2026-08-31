@@ -176,18 +176,39 @@ export function RedTeamLab() {
                     <button
                       type="button"
                       onClick={() => setSelected(name)}
-                      className={`group flex min-h-28 w-full flex-col justify-between border p-4 text-left transition ${
+                      className={`group relative flex min-h-28 w-full flex-col justify-between overflow-hidden rounded-lg border p-4 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-500/50 ${
                         selected === name
-                          ? "border-red-500/70 bg-red-500/10 shadow-[0_0_22px_rgba(239,68,68,0.08)]"
-                          : "border-slate-800 bg-[#0a1019] hover:border-slate-600"
+                          ? "border-red-500/60 bg-red-500/[0.07] shadow-[0_8px_20px_-12px_rgba(239,68,68,0.5)]"
+                          : "border-slate-800 bg-[#0a1019] hover:-translate-y-0.5 hover:border-slate-700 hover:bg-[#0c131d]"
                       }`}
                     >
+                      {selected === name && <span className="absolute inset-y-0 left-0 w-0.5 bg-red-500" />}
+
                       <div className="flex items-start justify-between">
-                        <Icon className={`size-5 ${selected === name ? "text-red-400" : "text-slate-500 group-hover:text-slate-300"}`} />
-                        {selected === name && <Check className="size-4 text-red-300" />}
+                        <div
+                          className={`flex size-10 items-center justify-center rounded-lg border transition-colors ${
+                            selected === name
+                              ? "border-red-500/40 bg-red-500/15 text-red-300"
+                              : "border-slate-800 bg-white/[0.03] text-slate-500 group-hover:border-slate-700 group-hover:text-slate-300"
+                          }`}
+                        >
+                          <Icon className="size-5" />
+                        </div>
+                        <span
+                          className={`flex size-5 items-center justify-center rounded-full border transition-colors ${
+                            selected === name
+                              ? "border-red-500 bg-red-500 text-white"
+                              : "border-slate-800 text-transparent group-hover:border-slate-700"
+                          }`}
+                        >
+                          <Check className="size-3" />
+                        </span>
                       </div>
                       <div>
-                        <p className="mt-4 text-sm font-medium text-slate-200">{index}. {name}</p>
+                        <p className="mt-4 text-sm font-medium text-slate-200">
+                          <span className="mr-1.5 font-mono text-[10px] text-slate-600">{String(index).padStart(2, "0")}</span>
+                          {name}
+                        </p>
                         <p className="mt-1 font-mono text-[10px] text-slate-600">{code} // {detail}</p>
                       </div>
                     </button>
