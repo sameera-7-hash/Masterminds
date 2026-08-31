@@ -70,6 +70,12 @@ function bandFor(value: number): RiskBand {
   return value > 70 ? "high" : value > 40 ? "medium" : "low"
 }
 
+// Gives each of the 5 signal / layer bars its own shade instead of one flat color, so the
+// ensemble reads as distinct channels at a glance. Classes are spelled out in full (not built
+// with string interpolation) so Tailwind's static scanner can find each one and generate it.
+const signalBarColors = ["[&>div]:bg-red-300", "[&>div]:bg-red-400", "[&>div]:bg-rose-400", "[&>div]:bg-red-500", "[&>div]:bg-rose-500"]
+const layerBarColors = ["[&>div]:bg-sky-400", "[&>div]:bg-blue-400", "[&>div]:bg-blue-500", "[&>div]:bg-indigo-400", "[&>div]:bg-indigo-500"]
+
 function agentBadgeClass(active: boolean): string {
   return `flex size-10 shrink-0 items-center justify-center rounded-lg border transition-colors ${
     active
@@ -283,7 +289,7 @@ export function RedTeamLab() {
                 </p>
               </div>
 
-              {signals.map(({ label, value, icon: Icon }) => {
+              {signals.map(({ label, value, icon: Icon }, i) => {
                 const band = bandFor(value)
                 return (
                   <div key={label}>
@@ -296,7 +302,7 @@ export function RedTeamLab() {
                         {band} / {value}
                       </span>
                     </div>
-                    <Progress value={value} className="h-1.5 bg-slate-800 [&>div]:bg-red-400" />
+                    <Progress value={value} className={`h-1.5 bg-slate-800 ${signalBarColors[i % signalBarColors.length]}`} />
                   </div>
                 )
               })}
@@ -385,13 +391,13 @@ export function RedTeamLab() {
             {!analyzing && blueTeamLayers && (
               <div className="grid gap-6 lg:grid-cols-[1fr_1fr_auto]">
                 <div className="space-y-4">
-                  {blueTeamLayers.map(({ label, score }) => (
+                  {blueTeamLayers.map(({ label, score }, i) => (
                     <div key={label}>
                       <div className="mb-1.5 flex items-center justify-between text-xs">
                         <span className="text-slate-400">{label}</span>
                         <span className="font-mono text-slate-300">{score}/100</span>
                       </div>
-                      <Progress value={score} className="h-1.5 bg-slate-800 [&>div]:bg-blue-400" />
+                      <Progress value={score} className={`h-1.5 bg-slate-800 ${layerBarColors[i % layerBarColors.length]}`} />
                     </div>
                   ))}
                 </div>
