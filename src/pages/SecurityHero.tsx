@@ -19,7 +19,7 @@ import {
   TrendingUp,
   X,
 } from "lucide-react"
-import { Line, LineChart, ResponsiveContainer } from "recharts"
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { getAnalyticsData } from "@/api/analytics"
 import { Badge } from "@/components/ui/badge"
 import { Reveal, RevealItem, RevealStagger } from "@/components/motion/Reveal"
@@ -336,7 +336,24 @@ export function SecurityHero() {
                 <div className="h-48 w-full min-w-0 sm:h-56">
                   {data && (
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={data.detectionTrend}>
+                      <LineChart data={data.detectionTrend} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>
+                        <CartesianGrid stroke="var(--color-slate-800)" vertical={false} />
+                        <XAxis
+                          dataKey="label"
+                          tickFormatter={(value: string) => value.replace("Cycle ", "")}
+                          tick={{ fill: "var(--color-slate-500)", fontSize: 10 }}
+                          axisLine={{ stroke: "var(--color-slate-800)" }}
+                          tickLine={false}
+                          interval={1}
+                        />
+                        <YAxis
+                          domain={[60, 100]}
+                          unit="%"
+                          tick={{ fill: "var(--color-slate-500)", fontSize: 10 }}
+                          axisLine={{ stroke: "var(--color-slate-800)" }}
+                          tickLine={false}
+                          width={40}
+                        />
                         <Line type="monotone" dataKey="beforeAdaptive" stroke="var(--color-red-400)" strokeWidth={2} strokeDasharray="6 4" dot={false} isAnimationActive={false} />
                         <Line type="monotone" dataKey="afterAdaptive" stroke="var(--color-emerald-400)" strokeWidth={2.5} dot={false} isAnimationActive={false} />
                       </LineChart>
@@ -358,21 +375,21 @@ export function SecurityHero() {
               <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">One closed loop, six steps</h2>
             </div>
           </Reveal>
-          <RevealStagger className="flex flex-col gap-3 md:flex-row md:items-stretch md:gap-2">
+          <RevealStagger className="flex flex-col gap-10 md:flex-row md:items-start md:gap-2">
             {HOW_IT_WORKS.map(({ title, detail, icon: Icon }, index) => (
               <Fragment key={title}>
-                <RevealItem className="flex-1">
-                  <div className="h-full rounded-2xl border border-white/10 bg-white/[0.02] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-400/30">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs text-white/30">0{index + 1}</span>
-                      <Icon className="size-4 text-indigo-300" />
-                    </div>
-                    <h3 className="mt-4 text-sm font-semibold text-white">{title}</h3>
-                    <p className="mt-1.5 text-xs leading-relaxed text-white/50">{detail}</p>
+                <RevealItem className="flex flex-1 flex-col items-center text-center">
+                  <div className="relative flex size-16 shrink-0 items-center justify-center rounded-full border border-indigo-400/25 bg-gradient-to-b from-indigo-500/15 to-transparent shadow-[0_0_24px_-6px_rgba(99,102,241,0.5)] transition-transform duration-300 hover:scale-110">
+                    <Icon className="size-6 text-indigo-300" />
+                    <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full border border-white/15 bg-[#0a0a12] font-mono text-[9px] font-semibold text-white/50">
+                      {index + 1}
+                    </span>
                   </div>
+                  <h3 className="mt-4 text-sm font-semibold text-white">{title}</h3>
+                  <p className="mt-2 max-w-[12rem] text-xs leading-relaxed text-white/50">{detail}</p>
                 </RevealItem>
                 {index < HOW_IT_WORKS.length - 1 && (
-                  <div className="hidden shrink-0 items-center justify-center md:flex">
+                  <div className="hidden shrink-0 items-center pt-8 md:flex">
                     <ChevronRight className="size-4 text-white/20" />
                   </div>
                 )}
