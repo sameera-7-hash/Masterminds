@@ -164,7 +164,7 @@ export function RedTeamLab() {
         ==================================================== */}
 
         <Reveal delay={0.1}>
-          <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+          <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
             <CardHeader className="border-b border-slate-800/80 px-5 py-4">
               <CardTitle className="text-sm font-medium text-slate-100">Select attack agent</CardTitle>
             </CardHeader>
@@ -203,7 +203,7 @@ export function RedTeamLab() {
         ==================================================== */}
 
         <Reveal delay={0.18}>
-          <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+          <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
             <CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4">
               <div>
                 <CardTitle className="text-sm font-medium text-slate-100">Generated scenario</CardTitle>
@@ -266,7 +266,7 @@ export function RedTeamLab() {
 
       {orchestratorScenarios && (
         <Reveal delay={0.22}>
-          <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+          <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
             <CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4">
               <div>
                 <CardTitle className="text-sm font-medium text-slate-100">Multi-agent campaign</CardTitle>
@@ -300,7 +300,7 @@ export function RedTeamLab() {
       ====================================================== */}
 
       <Reveal delay={0.26}>
-        <Card className={`relative overflow-hidden border-blue-500/20 bg-[#0d1520] shadow-none ${analyzing ? "scan-grid" : ""}`}>
+        <Card className={`relative overflow-hidden border-blue-500/20 bg-[#0d1520]/85 backdrop-blur-xl shadow-none ${analyzing ? "scan-grid" : ""}`}>
           {analyzing && <div className="scan-beam" />}
           <CardHeader className="relative z-10 flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4">
             <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-100">
