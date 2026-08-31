@@ -176,32 +176,17 @@ export function RedTeamLab() {
                     <button
                       type="button"
                       onClick={() => setSelected(name)}
-                      className={`group relative flex min-h-28 w-full flex-col justify-between overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 ${
+                      className={`group flex min-h-28 w-full flex-col justify-between border p-4 text-left transition ${
                         selected === name
-                          ? "border-red-500/70 bg-red-500/10 shadow-[0_0_28px_-8px_rgba(239,68,68,0.45)]"
-                          : "border-slate-800 bg-[#0a1019]/60 backdrop-blur-md hover:-translate-y-0.5 hover:border-slate-600 hover:bg-[#0c131d]/70"
+                          ? "border-red-500/70 bg-red-500/10 shadow-[0_0_22px_rgba(239,68,68,0.08)]"
+                          : "border-slate-800 bg-[#0a1019] hover:border-slate-600"
                       }`}
                     >
-                      {selected === name && (
-                        <span className="pointer-events-none absolute -right-6 -top-6 size-24 rounded-full bg-red-500/20 blur-2xl" />
-                      )}
-                      <div className="relative flex items-start justify-between">
-                        <div
-                          className={`flex size-10 items-center justify-center rounded-xl border transition-colors ${
-                            selected === name
-                              ? "border-red-500/40 bg-red-500/15 text-red-300"
-                              : "border-slate-700/70 bg-white/5 text-slate-500 group-hover:border-slate-600 group-hover:text-slate-300"
-                          }`}
-                        >
-                          <Icon className="size-5" />
-                        </div>
-                        {selected === name && (
-                          <span className="flex size-5 items-center justify-center rounded-full bg-red-500/25 text-red-300">
-                            <Check className="size-3.5" />
-                          </span>
-                        )}
+                      <div className="flex items-start justify-between">
+                        <Icon className={`size-5 ${selected === name ? "text-red-400" : "text-slate-500 group-hover:text-slate-300"}`} />
+                        {selected === name && <Check className="size-4 text-red-300" />}
                       </div>
-                      <div className="relative">
+                      <div>
                         <p className="mt-4 text-sm font-medium text-slate-200">{index}. {name}</p>
                         <p className="mt-1 font-mono text-[10px] text-slate-600">{code} // {detail}</p>
                       </div>
