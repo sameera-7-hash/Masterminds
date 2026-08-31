@@ -23,7 +23,13 @@ export default defineConfig({
       // rewrite CSV logs on every request, which Vite otherwise can't HMR and falls
       // back to full page reload for, wiping in-progress UI state (e.g. Red Team ->
       // Blue Team sync results) seconds after they land.
-      ignored: ["**/red-team01/**"],
+      //
+      // Fraudshield-back is also a Python backend (several nested .venv's, a dataset
+      // folder, three sub-repos) - ~75k files that aren't part of the Vite app. Without
+      // this, chokidar tries to set up a watch handle on every one of them on startup,
+      // which on Windows saturates the dev server badly enough that it stops answering
+      // requests after the first one or two.
+      ignored: ["**/red-team01/**", "**/Fraudshield-back/**"],
     },
   },
 })
