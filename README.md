@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:2c5364,100:00c6ff&height=220&section=header&text=FraudShield%20AI&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=Autonomous%20Red%20Team%20vs%20Blue%20Team%20Framework%20for%20Adaptive%20Financial%20Fraud%20Defense&descAlignY=58&descSize=18&animation=fadeIn" width="100%"/>
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:2c5364,100:00c6ff&height=220&section=header&text=FraudShield%20AI&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=Auton[...] 
 
 <br/>
 
@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=2800&pause=900&color=00C6FF&center=true&vCenter=true&width=780&lines=A+fraud-defense+system+that+attacks+itself...;...to+discover+and+improve+its+own+blind+spots.;Red+Team+%E2%9A%94%EF%B8%8F+Blue+Team+%F0%9F%9B%A1%EF%B8%8F+Adaptive+Learning+%F0%9F%A7%A0;Built+for+the+Mastercard+Innovation+Challenge+%40+GFF+2026)](https://git.io/typing-svg)
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=2800&pause=900&color=00C6FF&center=true&vCenter=true&width=780&lines=A+fraud-defense+system+that+att[...]
 
 <br/>
 
@@ -60,9 +60,9 @@ Frontend Codename: **FraudShield AI Dashboard** &nbsp;·&nbsp; Core Engine: **Se
 
 ## 🎯 Mission Briefing
 
-> Traditional fraud detection systems lean on **static rules** and **previously known attack signatures**. The moment an adversary mutates their behaviour or invents something new, that defense goes blind.
+> Traditional fraud detection systems lean on **static rules** and **previously known attack signatures**. The moment an adversary mutates their behaviour or invents something new, that defense go[...]
 
-**SentinelPay AI** flips the model. Instead of passively waiting to be attacked, the system **attacks itself, continuously** — an autonomous Red Team generates evolving synthetic fraud, an independent Blue Team detects and explains it, and an adaptive feedback loop closes the gap between the two, cycle after cycle.
+**SentinelPay AI** flips the model. Instead of passively waiting to be attacked, the system **attacks itself, continuously** — an autonomous Red Team generates evolving synthetic fraud, an indep[...]
 
 ```
    Attack  →  Detection  →  Evaluation  →  Learning  →  Defense Improvement  →  Retest
@@ -258,7 +258,7 @@ Seven independent detection layers, none of which is trusted alone:
 
 </div>
 
-> ⚠️ **Design principle:** the ML classifier is *intentionally* trained without the `zero_day_drain` pattern — this deliberately creates a blind spot so the Novelty Agent and Adaptive Defense loop have something real to prove.
+> ⚠️ **Design principle:** the ML classifier is *intentionally* trained without the `zero_day_drain` pattern — this deliberately creates a blind spot so the Novelty Agent and Adaptive Defen[...]
 
 ---
 
@@ -386,6 +386,7 @@ Interactive Swagger docs available at `/docs` once the Blue Team API is running.
 ### Deployment
 ![GitHub](https://img.shields.io/badge/GitHub-black?style=flat-square&logo=github)
 ![Render](https://img.shields.io/badge/Render-black?style=flat-square&logo=render)
+![Vercel](https://img.shields.io/badge/Vercel-black?style=flat-square&logo=vercel)
 
 </div>
 
@@ -439,7 +440,7 @@ npm run dev
 | | Sameera | Prathamesh | Sahil |
 |:---:|:---:|:---:|:---:|
 | **Role** | 🖥️ Dashboard, Backend & Integration Lead | 🔴 Red Team Lead | 🔵 Blue Team Lead |
-| **Owns** | FastAPI backend · Database · Full dashboard UI · System integration | Synthetic data generation · All 6 attack agents · ML classifier | Rule engine · RAG + LLM reasoning · Graph analysis · Risk fusion · Adaptive defense |
+| **Owns** | FastAPI backend · Database · Full dashboard UI · System integration | Synthetic data generation · All 6 attack agents · ML classifier | Rule engine · RAG + LLM reasoning · Gra[...]
 
 </div>
 
