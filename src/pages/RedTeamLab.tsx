@@ -179,7 +179,7 @@ export function RedTeamLab() {
                       className={`group relative flex min-h-28 w-full flex-col justify-between overflow-hidden rounded-2xl border p-4 text-left transition-all duration-300 ${
                         selected === name
                           ? "border-red-500/70 bg-red-500/10 shadow-[0_0_28px_-8px_rgba(239,68,68,0.45)]"
-                          : "border-slate-800 bg-[#0a1019] hover:-translate-y-0.5 hover:border-slate-600 hover:bg-[#0c131d]"
+                          : "border-slate-800 bg-[#0a1019]/60 backdrop-blur-md hover:-translate-y-0.5 hover:border-slate-600 hover:bg-[#0c131d]/70"
                       }`}
                     >
                       {selected === name && (
