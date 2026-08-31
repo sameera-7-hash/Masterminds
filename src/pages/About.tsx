@@ -88,7 +88,7 @@ export function About() {
                 <div className={`pointer-events-none absolute inset-x-0 top-0 -z-10 h-32 bg-gradient-to-b ${glow} to-transparent`} />
                 <Icon className="size-6" />
                 <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">{label}</p>
-                <h3 className="mt-2 text-lg font-semibold text-white">{title}</h3>
+                <h2 className="mt-2 text-lg font-semibold text-white">{title}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-white/55">{detail}</p>
               </div>
             </RevealItem>
@@ -111,7 +111,7 @@ export function About() {
                     <span className="font-mono text-xs text-white/30">{step}</span>
                     <Icon className="size-4 text-indigo-300" />
                   </div>
-                  <h4 className="mt-4 text-sm font-semibold text-white">{title}</h4>
+                  <h3 className="mt-4 text-sm font-semibold text-white">{title}</h3>
                   <p className="mt-1.5 text-xs leading-relaxed text-white/50">{detail}</p>
                 </div>
               </RevealItem>

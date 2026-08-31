@@ -11,6 +11,10 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    // Debuggability only - doesn't affect what ships to the browser at runtime.
+    sourcemap: true,
+  },
   server: {
     port: 5174,
     strictPort: true,

@@ -27,6 +27,8 @@ import { TypingText } from "@/components/motion/TypingText"
 import { supabase } from "@/lib/supabase"
 import { REGULATORY_POINTS } from "@/lib/regulatory"
 
+const HERO_HEADLINE = "Stop fraud before it becomes a story."
+
 const signals = [
   { label: "Threat detected", detail: "Credential stuffing pattern", tone: "danger" },
   { label: "IP verified", detail: "Reputation and geo match", tone: "safe" },
@@ -161,8 +163,15 @@ export function SecurityHero() {
                 </span>
               </Reveal>
               <Reveal delay={0.14}>
-                <h1 className="hero-title text-4xl leading-[1.05] text-white sm:text-5xl sm:leading-[1.02] lg:text-6xl xl:text-[3.9rem]">
-                  <TypingText text="Stop fraud before it becomes a story." speed={65} startDelay={300} startImmediately />
+                {/* The grid-stacks-two-children trick reserves the full headline's final
+                    height from first paint: the invisible full-text clone and the
+                    in-progress typed text share one grid cell, so the row sizes to the
+                    taller (always-complete) clone and nothing shifts as typing fills in. */}
+                <h1 className="hero-title grid text-4xl leading-[1.05] text-white sm:text-5xl sm:leading-[1.02] lg:text-6xl xl:text-[3.9rem]">
+                  <span aria-hidden="true" className="invisible [grid-area:1/1]">{HERO_HEADLINE}</span>
+                  <span className="[grid-area:1/1]">
+                    <TypingText text={HERO_HEADLINE} speed={65} startDelay={300} startImmediately />
+                  </span>
                 </h1>
               </Reveal>
               <Reveal delay={0.22}>
@@ -217,7 +226,7 @@ export function SecurityHero() {
                 </div>
 
                 <div className="mt-8 grid grid-cols-2 gap-4 border-b border-white/10 pb-6">
-                  <div><p className="text-xs text-white/45">Current risk</p><p className="risk-score mt-2 text-4xl font-semibold tracking-tight text-white" aria-label="Current risk score" /></div>
+                  <div><p className="text-xs text-white/45">Current risk</p><p role="img" className="risk-score mt-2 text-4xl font-semibold tracking-tight text-white" aria-label="Current risk score" /></div>
                   <div><p className="text-xs text-white/45">Signals resolved</p><p className="mt-2 text-4xl font-semibold tracking-tight text-white">24<span className="text-lg text-white/40">/28</span></p></div>
                 </div>
 
@@ -358,7 +367,7 @@ export function SecurityHero() {
                       <span className="font-mono text-xs text-white/30">0{index + 1}</span>
                       <Icon className="size-4 text-indigo-300" />
                     </div>
-                    <h4 className="mt-4 text-sm font-semibold text-white">{title}</h4>
+                    <h3 className="mt-4 text-sm font-semibold text-white">{title}</h3>
                     <p className="mt-1.5 text-xs leading-relaxed text-white/50">{detail}</p>
                   </div>
                 </RevealItem>
