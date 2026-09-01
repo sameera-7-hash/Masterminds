@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:2c5364,100:00c6ff&height=220&section=header&text=FraudShield%20AI&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=Auton[...] 
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:2c5364,100:00c6ff&height=220&section=header&text=FraudShield%20AI&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=Autonomous%20Red-Team%20%26%20Blue-Team%20Defense"/>
 
 <br/>
 
@@ -8,7 +8,7 @@
 
 <br/><br/>
 
-[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=2800&pause=900&color=00C6FF&center=true&vCenter=true&width=780&lines=A+fraud-defense+system+that+att[...]
+[![Typing SVG](https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=22&duration=2800&pause=900&color=00C6FF&center=true&vCenter=true&width=780&lines=A+fraud-defense+system+that+attacks+itself;Autonomous+Red-Team+meets+Blue-Team+detection;Adaptive+defense+that+learns+every+attack;Real-time+risk+fusion+and+explainability)](https://github.com/sameera-7-hash/Masterminds)
 
 <br/>
 
@@ -60,9 +60,9 @@ Frontend Codename: **FraudShield AI Dashboard** &nbsp;·&nbsp; Core Engine: **Se
 
 ## 🎯 Mission Briefing
 
-> Traditional fraud detection systems lean on **static rules** and **previously known attack signatures**. The moment an adversary mutates their behaviour or invents something new, that defense go[...]
+> Traditional fraud detection systems lean on **static rules** and **previously known attack signatures**. The moment an adversary mutates their behaviour or invents something new, that defense goes dark.
 
-**SentinelPay AI** flips the model. Instead of passively waiting to be attacked, the system **attacks itself, continuously** — an autonomous Red Team generates evolving synthetic fraud, an indep[...]
+**SentinelPay AI** flips the model. Instead of passively waiting to be attacked, the system **attacks itself, continuously** — an autonomous Red Team generates evolving synthetic fraud, an independent Blue Team detects it, and every miss becomes a lesson that strengthens tomorrow's defense.
 
 ```
    Attack  →  Detection  →  Evaluation  →  Learning  →  Defense Improvement  →  Retest
@@ -258,7 +258,7 @@ Seven independent detection layers, none of which is trusted alone:
 
 </div>
 
-> ⚠️ **Design principle:** the ML classifier is *intentionally* trained without the `zero_day_drain` pattern — this deliberately creates a blind spot so the Novelty Agent and Adaptive Defen[...]
+> ⚠️ **Design principle:** the ML classifier is *intentionally* trained without the `zero_day_drain` pattern — this deliberately creates a blind spot so the Novelty Agent and Adaptive Defense can demonstrate learning in real-time.
 
 ---
 
@@ -440,7 +440,7 @@ npm run dev
 | | Sameera | Prathamesh | Sahil |
 |:---:|:---:|:---:|:---:|
 | **Role** | 🖥️ Dashboard, Backend & Integration Lead | 🔴 Red Team Lead | 🔵 Blue Team Lead |
-| **Owns** | FastAPI backend · Database · Full dashboard UI · System integration | Synthetic data generation · All 6 attack agents · ML classifier | Rule engine · RAG + LLM reasoning · Gra[...]
+| **Owns** | FastAPI backend · Database · Full dashboard UI · System integration | Synthetic data generation · All 6 attack agents · ML classifier | Rule engine · RAG + LLM reasoning · Graph analysis · Anomaly detection |
 
 </div>
 
