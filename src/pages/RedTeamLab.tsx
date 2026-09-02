@@ -70,6 +70,28 @@ function bandFor(value: number): RiskBand {
   return value > 70 ? "high" : value > 40 ? "medium" : "low"
 }
 
+// Gives each of the 5 signal / layer bars its own shade instead of one flat color, so the
+// ensemble reads as distinct channels at a glance. Classes are spelled out in full (not built
+// with string interpolation) so Tailwind's static scanner can find each one and generate it.
+const signalBarColors = ["[&>div]:bg-red-300", "[&>div]:bg-red-400", "[&>div]:bg-red-500", "[&>div]:bg-red-600", "[&>div]:bg-red-700"]
+const layerBarColors = ["[&>div]:bg-blue-300", "[&>div]:bg-blue-400", "[&>div]:bg-blue-500", "[&>div]:bg-blue-600", "[&>div]:bg-blue-700"]
+
+function agentBadgeClass(active: boolean): string {
+  return `flex size-10 shrink-0 items-center justify-center rounded-lg border transition-colors ${
+    active
+      ? "border-red-500/40 bg-red-500/15 text-red-300"
+      : "border-slate-800 bg-white/[0.03] text-slate-500 group-hover:border-slate-700 group-hover:text-slate-300"
+  }`
+}
+
+function agentCheckClass(active: boolean): string {
+  return `flex size-5 shrink-0 items-center justify-center rounded-full border transition-colors ${
+    active
+      ? "border-red-500 bg-red-500 text-white"
+      : "border-slate-800 text-transparent group-hover:border-slate-700"
+  }`
+}
+
 // The live Red Team API reports attack_type as e.g. "ACCOUNT_TAKEOVER" - this is only
 // for the campaign summary grid's raw per-scenario labels, not the curated agent list above.
 function prettifyAttackType(raw: string): string {
@@ -164,36 +186,77 @@ export function RedTeamLab() {
         ==================================================== */}
 
         <Reveal delay={0.1}>
-          <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+          <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
             <CardHeader className="border-b border-slate-800/80 px-5 py-4">
               <CardTitle className="text-sm font-medium text-slate-100">Select attack agent</CardTitle>
             </CardHeader>
 
-            <CardContent className="p-5">
+            <CardContent className="space-y-3 p-5">
               <RevealStagger className="grid gap-3 sm:grid-cols-2" step={0.05}>
-                {agents.map(({ index, name, code, detail, icon: Icon }) => (
+                {agents.filter(({ index }) => index !== 7).map(({ index, name, code, detail, icon: Icon }) => (
                   <RevealItem key={name}>
                     <button
                       type="button"
                       onClick={() => setSelected(name)}
-                      className={`group flex min-h-28 w-full flex-col justify-between border p-4 text-left transition ${
+                      className={`group relative flex min-h-28 w-full flex-col justify-between overflow-hidden rounded-lg border p-4 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-500/50 ${
                         selected === name
-                          ? "border-red-500/70 bg-red-500/10 shadow-[0_0_22px_rgba(239,68,68,0.08)]"
-                          : "border-slate-800 bg-[#0a1019] hover:border-slate-600"
+                          ? "border-red-500/60 bg-red-500/[0.07] shadow-[0_8px_20px_-12px_rgba(239,68,68,0.5)]"
+                          : "border-slate-800 bg-[#0a1019] hover:-translate-y-0.5 hover:border-slate-700 hover:bg-[#0c131d]"
                       }`}
                     >
+                      {selected === name && <span className="absolute inset-y-0 left-0 w-0.5 bg-red-500" />}
+
                       <div className="flex items-start justify-between">
-                        <Icon className={`size-5 ${selected === name ? "text-red-400" : "text-slate-500 group-hover:text-slate-300"}`} />
-                        {selected === name && <Check className="size-4 text-red-300" />}
+                        <div className={agentBadgeClass(selected === name)}>
+                          <Icon className="size-5" />
+                        </div>
+                        <span className={agentCheckClass(selected === name)}>
+                          <Check className="size-3" />
+                        </span>
                       </div>
                       <div>
-                        <p className="mt-4 text-sm font-medium text-slate-200">{index}. {name}</p>
+                        <p className="mt-4 text-sm font-medium text-slate-200">
+                          <span className="mr-1.5 font-mono text-[10px] text-slate-600">{String(index).padStart(2, "0")}</span>
+                          {name}
+                        </p>
                         <p className="mt-1 font-mono text-[10px] text-slate-600">{code} // {detail}</p>
                       </div>
                     </button>
                   </RevealItem>
                 ))}
               </RevealStagger>
+
+              {/* Auto/Orchestrator runs every agent above as one campaign, so it gets its
+                  own full-width row instead of dangling alone in a 2-column grid. */}
+              {agents.filter(({ index }) => index === 7).map(({ index, name, code, detail, icon: Icon }) => (
+                <RevealItem key={name}>
+                  <button
+                    type="button"
+                    onClick={() => setSelected(name)}
+                    className={`group relative flex w-full items-center gap-4 overflow-hidden rounded-lg border p-4 text-left transition-all duration-200 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-red-500/50 ${
+                      selected === name
+                        ? "border-red-500/60 bg-red-500/[0.07] shadow-[0_8px_20px_-12px_rgba(239,68,68,0.5)]"
+                        : "border-slate-800 bg-[#0a1019] hover:-translate-y-0.5 hover:border-slate-700 hover:bg-[#0c131d]"
+                    }`}
+                  >
+                    {selected === name && <span className="absolute inset-y-0 left-0 w-0.5 bg-red-500" />}
+
+                    <div className={agentBadgeClass(selected === name)}>
+                      <Icon className="size-5" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-sm font-medium text-slate-200">
+                        <span className="mr-1.5 font-mono text-[10px] text-slate-600">{String(index).padStart(2, "0")}</span>
+                        {name}
+                      </p>
+                      <p className="mt-1 font-mono text-[10px] text-slate-600">{code} // {detail}</p>
+                    </div>
+                    <span className={agentCheckClass(selected === name)}>
+                      <Check className="size-3" />
+                    </span>
+                  </button>
+                </RevealItem>
+              ))}
             </CardContent>
           </Card>
         </Reveal>
@@ -203,7 +266,7 @@ export function RedTeamLab() {
         ==================================================== */}
 
         <Reveal delay={0.18}>
-          <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+          <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
             <CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4">
               <div>
                 <CardTitle className="text-sm font-medium text-slate-100">Generated scenario</CardTitle>
@@ -226,7 +289,7 @@ export function RedTeamLab() {
                 </p>
               </div>
 
-              {signals.map(({ label, value, icon: Icon }) => {
+              {signals.map(({ label, value, icon: Icon }, i) => {
                 const band = bandFor(value)
                 return (
                   <div key={label}>
@@ -239,7 +302,7 @@ export function RedTeamLab() {
                         {band} / {value}
                       </span>
                     </div>
-                    <Progress value={value} className="h-1.5 bg-slate-800 [&>div]:bg-red-400" />
+                    <Progress value={value} className={`h-1.5 bg-slate-800 ${signalBarColors[i % signalBarColors.length]}`} />
                   </div>
                 )
               })}
@@ -266,7 +329,7 @@ export function RedTeamLab() {
 
       {orchestratorScenarios && (
         <Reveal delay={0.22}>
-          <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+          <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
             <CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4">
               <div>
                 <CardTitle className="text-sm font-medium text-slate-100">Multi-agent campaign</CardTitle>
@@ -300,7 +363,7 @@ export function RedTeamLab() {
       ====================================================== */}
 
       <Reveal delay={0.26}>
-        <Card className={`relative overflow-hidden border-blue-500/20 bg-[#0d1520] shadow-none ${analyzing ? "scan-grid" : ""}`}>
+        <Card className={`relative overflow-hidden border-blue-500/20 bg-[#0d1520]/85 backdrop-blur-xl shadow-none ${analyzing ? "scan-grid" : ""}`}>
           {analyzing && <div className="scan-beam" />}
           <CardHeader className="relative z-10 flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4">
             <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-100">
@@ -328,13 +391,13 @@ export function RedTeamLab() {
             {!analyzing && blueTeamLayers && (
               <div className="grid gap-6 lg:grid-cols-[1fr_1fr_auto]">
                 <div className="space-y-4">
-                  {blueTeamLayers.map(({ label, score }) => (
+                  {blueTeamLayers.map(({ label, score }, i) => (
                     <div key={label}>
                       <div className="mb-1.5 flex items-center justify-between text-xs">
                         <span className="text-slate-400">{label}</span>
                         <span className="font-mono text-slate-300">{score}/100</span>
                       </div>
-                      <Progress value={score} className="h-1.5 bg-slate-800 [&>div]:bg-blue-400" />
+                      <Progress value={score} className={`h-1.5 bg-slate-800 ${layerBarColors[i % layerBarColors.length]}`} />
                     </div>
                   ))}
                 </div>

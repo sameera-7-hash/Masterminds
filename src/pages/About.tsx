@@ -70,7 +70,7 @@ export function About() {
             </span>
           </Reveal>
           <Reveal delay={0.12}>
-            <h1 className="hero-title mx-auto max-w-3xl text-5xl leading-[1.08] text-white sm:text-6xl">
+            <h1 className="hero-title mx-auto max-w-3xl text-4xl leading-[1.08] text-white sm:text-5xl">
               We built the attacker and the defender in the same room.
             </h1>
           </Reveal>
@@ -88,7 +88,7 @@ export function About() {
                 <div className={`pointer-events-none absolute inset-x-0 top-0 -z-10 h-32 bg-gradient-to-b ${glow} to-transparent`} />
                 <Icon className="size-6" />
                 <p className="mt-4 font-mono text-[10px] uppercase tracking-[0.2em] text-white/40">{label}</p>
-                <h3 className="mt-2 text-xl text-white">{title}</h3>
+                <h2 className="mt-2 text-lg font-semibold text-white">{title}</h2>
                 <p className="mt-2 text-sm leading-relaxed text-white/55">{detail}</p>
               </div>
             </RevealItem>
@@ -99,7 +99,7 @@ export function About() {
           <Reveal>
             <div className="mb-10 text-center">
               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-indigo-300">How it works</p>
-              <h2 className="mt-2 text-3xl tracking-tight text-white sm:text-4xl">A loop that closes itself</h2>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">A loop that closes itself</h2>
               <p className="mx-auto mt-3 max-w-xl text-sm text-white/50">Every simulated attack runs through the same four-stage cycle the live dashboard visualizes end to end.</p>
             </div>
           </Reveal>
@@ -111,7 +111,7 @@ export function About() {
                     <span className="font-mono text-xs text-white/30">{step}</span>
                     <Icon className="size-4 text-indigo-300" />
                   </div>
-                  <h4 className="mt-4 text-base text-white">{title}</h4>
+                  <h3 className="mt-4 text-sm font-semibold text-white">{title}</h3>
                   <p className="mt-1.5 text-xs leading-relaxed text-white/50">{detail}</p>
                 </div>
               </RevealItem>
@@ -137,7 +137,7 @@ export function About() {
             <div className="flex flex-col items-start gap-6 rounded-[28px] border border-white/10 bg-gradient-to-br from-indigo-500/10 via-white/[0.02] to-transparent p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
               <div>
                 <p className="flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.2em] text-indigo-300"><GitBranch className="size-3.5" /> Three roles, one loop</p>
-                <h2 className="mt-3 max-w-md text-2xl text-white sm:text-3xl">A dashboard-and-integration lead, a Red Team lead, and a Blue Team lead - built as one system, not three demos stitched together.</h2>
+                <h2 className="mt-3 max-w-md text-xl font-semibold text-white sm:text-2xl">A dashboard-and-integration lead, a Red Team lead, and a Blue Team lead - built as one system, not three demos stitched together.</h2>
               </div>
               <div className="flex shrink-0 flex-wrap gap-3">
                 <Link to="/preview" className="inline-flex items-center gap-1.5 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/80 transition-colors hover:border-white/30 hover:text-white">

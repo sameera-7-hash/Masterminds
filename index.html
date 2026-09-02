@@ -5,9 +5,14 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FraudShield</title>
+    <meta name="description" content="FraudShield runs an autonomous Red Team vs. Blue Team adversarial loop that generates novel fraud patterns and detects them across five independent signals, closing detection gaps before real attackers find them." />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Inter:wght@400;500;600;700&family=Doto:wght@500&family=Bitcount:wght@300&family=Orbitron:wght@500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Orbitron (headings/.hero-title, weight 600) is also used at weight 500 via
+         CardTitle's `font-heading font-medium` - wght@500..600 covers both without the
+         full 400..900 variable range. Space Mono (body font) is used at 400/700 but
+         never italic anywhere in the app, so the ital axis is dropped entirely. -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500..600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   </head>
   <body>
     <div id="root"></div>

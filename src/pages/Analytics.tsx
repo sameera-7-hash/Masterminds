@@ -92,7 +92,7 @@ export function Analytics() {
           <RevealStagger className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {stats.map(({ label, value, format, icon: Icon, tone }, index) => (
               <RevealItem key={label}>
-                <Card className="border-slate-800 bg-[#0d1520] shadow-none transition-colors hover:border-slate-700">
+                <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none transition-colors hover:border-slate-700">
                   <CardContent className="p-5">
                     <div className="flex items-start justify-between">
                       <div>
@@ -109,7 +109,7 @@ export function Analytics() {
           </RevealStagger>
 
           <Reveal delay={0.06}>
-            <Card className="overflow-hidden border-cyan-500/20 bg-[#0d1520] shadow-none">
+            <Card className="overflow-hidden border-cyan-500/20 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
               <CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4">
                 <div>
                   <CardTitle className="text-sm font-medium text-slate-100">Simulated Attack Activity</CardTitle>
@@ -124,7 +124,7 @@ export function Analytics() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+            <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
               <CardHeader className="flex flex-row items-center justify-between border-b border-slate-800/80 px-5 py-4">
                 <div>
                   <CardTitle className="text-sm font-medium text-slate-100">Detection Rate Over Time</CardTitle>
@@ -151,7 +151,7 @@ export function Analytics() {
 
           <div className="grid gap-4 md:grid-cols-2">
             <Reveal delay={0.16}>
-              <Card className="h-full border-slate-800 bg-[#0d1520] shadow-none">
+              <Card className="h-full border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
                 <CardHeader className="border-b border-slate-800/80 px-5 py-4">
                   <CardTitle className="text-sm font-medium text-slate-100">False Positive Rate Trend</CardTitle>
                 </CardHeader>
@@ -178,7 +178,7 @@ export function Analytics() {
             </Reveal>
 
             <Reveal delay={0.2}>
-              <Card className="h-full border-slate-800 bg-[#0d1520] shadow-none">
+              <Card className="h-full border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
                 <CardHeader className="border-b border-slate-800/80 px-5 py-4">
                   <CardTitle className="text-sm font-medium text-slate-100">Attacks by Type</CardTitle>
                 </CardHeader>
@@ -210,7 +210,7 @@ export function Analytics() {
           </div>
 
           <Reveal delay={0.26}>
-            <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+            <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
               <CardHeader className="flex flex-row items-end justify-between border-b border-slate-800/80 px-5 py-4">
                 <div>
                   <CardTitle className="text-sm font-medium text-slate-100">Adaptive Defense Impact Log</CardTitle>
@@ -248,7 +248,7 @@ export function Analytics() {
           </Reveal>
 
           <Reveal delay={0.3}>
-            <Card className="border-emerald-500/15 bg-[#0d1520] shadow-none">
+            <Card className="border-emerald-500/15 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
               <button
                 type="button"
                 onClick={() => setShowRegulatory((v) => !v)}

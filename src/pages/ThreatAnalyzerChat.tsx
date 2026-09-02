@@ -162,7 +162,7 @@ export function ThreatAnalyzerChat() {
 
       <Reveal delay={0.1}>
         <div className="grid gap-6 lg:grid-cols-[1fr_280px]">
-          <Card className={`relative flex h-[560px] flex-col overflow-hidden border-slate-800 bg-[#0d1520] shadow-none ${loading ? "scan-grid" : ""}`}>
+          <Card className={`relative flex h-[560px] flex-col overflow-hidden border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none ${loading ? "scan-grid" : ""}`}>
             {loading && <div className="scan-beam" />}
             <CardHeader className="relative z-10 border-b border-slate-800/80 px-5 py-4">
               <CardTitle className="flex items-center gap-2 text-sm font-medium text-slate-100">
@@ -261,7 +261,7 @@ export function ThreatAnalyzerChat() {
 
           <div className="space-y-4">
             <Reveal delay={0.18}>
-              <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+              <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
                 <CardHeader className="border-b border-slate-800/80 px-4 py-3">
                   <CardTitle className="flex items-center gap-2 text-xs font-medium text-slate-200">
                     <Sparkles className="size-3.5 text-indigo-300" /> Analyst capabilities
@@ -283,7 +283,7 @@ export function ThreatAnalyzerChat() {
             </Reveal>
 
             <Reveal delay={0.24}>
-              <Card className="border-slate-800 bg-[#0d1520] shadow-none">
+              <Card className="border-slate-800 bg-[#0d1520]/85 backdrop-blur-xl shadow-none">
                 <CardHeader className="border-b border-slate-800/80 px-4 py-3">
                   <CardTitle className="text-xs font-medium text-slate-200">Try asking</CardTitle>
                 </CardHeader>

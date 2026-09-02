@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useRef, useState } from "react"
 import type { CSSProperties } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion"
+import { motion, useScroll, useSpring, useTransform } from "framer-motion"
 import {
   ArrowRight,
   Bot,
@@ -19,58 +19,21 @@ import {
   TrendingUp,
   X,
 } from "lucide-react"
-import { Line, LineChart, ResponsiveContainer } from "recharts"
+import { CartesianGrid, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 import { getAnalyticsData } from "@/api/analytics"
 import { Badge } from "@/components/ui/badge"
-import { CountUp } from "@/components/motion/CountUp"
 import { Reveal, RevealItem, RevealStagger } from "@/components/motion/Reveal"
+import { TypingText } from "@/components/motion/TypingText"
 import { supabase } from "@/lib/supabase"
 import { REGULATORY_POINTS } from "@/lib/regulatory"
+
+const HERO_HEADLINE = "Stop fraud before it becomes a story."
 
 const signals = [
   { label: "Threat detected", detail: "Credential stuffing pattern", tone: "danger" },
   { label: "IP verified", detail: "Reputation and geo match", tone: "safe" },
   { label: "Login anomaly", detail: "New device fingerprint", tone: "warning" },
 ]
-
-const HERO_DRIFT_DOTS = [
-  { top: "18%", left: "10%", dx: "10px", dy: "-8px", dur: "21s", delay: "0s" },
-  { top: "72%", left: "22%", dx: "-8px", dy: "10px", dur: "26s", delay: "2s" },
-  { top: "30%", left: "62%", dx: "9px", dy: "9px", dur: "19s", delay: "1s" },
-  { top: "85%", left: "78%", dx: "-10px", dy: "-6px", dur: "24s", delay: "3.5s" },
-  { top: "12%", left: "88%", dx: "-7px", dy: "9px", dur: "23s", delay: "1.5s" },
-]
-
-// Splits copy into per-letter spans so CSS can stagger them in on mount ("pixel
-// grid assembling itself"), then appends a blinking block cursor timed to land
-// right after the last letter. Screen readers get the plain string via aria-label;
-// the letter spans themselves are aria-hidden to avoid reading it out twice.
-function PixelBuildIn({ text }: { text: string }) {
-  const words = text.split(" ")
-  let letterIndex = 0
-  return (
-    <span aria-label={text}>
-      {words.map((word, wordIndex) => (
-        <Fragment key={wordIndex}>
-          <span className="inline-block whitespace-nowrap">
-            {word.split("").map((char, charIndex) => {
-              const i = letterIndex++
-              return (
-                <span key={charIndex} className="pixel-letter" style={{ "--i": i } as CSSProperties} aria-hidden="true">
-                  {char}
-                </span>
-              )
-            })}
-          </span>
-          {wordIndex < words.length - 1 ? " " : ""}
-        </Fragment>
-      ))}
-      <span className="pixel-cursor" style={{ "--i": letterIndex } as CSSProperties} aria-hidden="true">
-        ▌
-      </span>
-    </span>
-  )
-}
 
 // The dashboard itself (Command Center, Red/Blue Team) is behind a Supabase login, so
 // the marketing nav no longer links straight into it - that would just dead-end on a
@@ -118,29 +81,15 @@ export function SecurityHero() {
   const navigate = useNavigate()
   const [checkingSession, setCheckingSession] = useState(true)
   const [data, setData] = useState<Awaited<ReturnType<typeof getAnalyticsData>> | null>(null)
+
+  const { scrollYProgress } = useScroll()
+  const scrollProgress = useSpring(scrollYProgress, { stiffness: 220, damping: 32, restDelta: 0.001 })
+
   const heroRef = useRef<HTMLElement>(null)
-  const heroContentRef = useRef<HTMLDivElement>(null)
-  const reduceMotion = useReducedMotion()
-  // Ties the hero's background atmosphere and content to how far the hero has
-  // scrolled past, instead of the pointer - a slow parallax drift on the grain/star
-  // layer, and a gentle fade + scale-down on the content as the hero scrolls away.
-  const { scrollYProgress: heroScroll } = useScroll({ target: heroRef, offset: ["start start", "end start"] })
-  const heroBgY = useTransform(heroScroll, [0, 1], reduceMotion ? ["0%", "0%"] : ["0%", "18%"])
-  const heroContentOpacity = useTransform(heroScroll, [0.55, 1], reduceMotion ? [1, 1] : [1, 0.15])
-  const heroContentScale = useTransform(heroScroll, [0, 1], reduceMotion ? [1, 1] : [1, 0.97])
-  // Writing these two through motion's `style` prop left opacity stuck (scale updated
-  // fine through the same prop, oddly) - subscribing and mutating the ref directly
-  // sidesteps whatever's going on there and is proven to work (same approach the old
-  // cursor-tracking spotlight used).
-  useEffect(() => {
-    const unsubOpacity = heroContentOpacity.on("change", (v) => {
-      if (heroContentRef.current) heroContentRef.current.style.opacity = String(v)
-    })
-    const unsubScale = heroContentScale.on("change", (v) => {
-      if (heroContentRef.current) heroContentRef.current.style.transform = `scale(${v})`
-    })
-    return () => { unsubOpacity(); unsubScale() }
-  }, [heroContentOpacity, heroContentScale])
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] })
+  const heroCardY = useTransform(heroProgress, [0, 1], [0, 90])
+  const heroCopyY = useTransform(heroProgress, [0, 1], [0, -50])
+  const heroFade = useTransform(heroProgress, [0, 0.7], [1, 0])
 
   // A logged-in visitor lands on the dashboard, not the pitch page.
   useEffect(() => {
@@ -156,28 +105,28 @@ export function SecurityHero() {
 
   useEffect(() => { void getAnalyticsData().then(setData) }, [])
 
+  if (checkingSession) {
+    return <div className="flex min-h-svh items-center justify-center bg-[#05050a] font-mono text-xs text-slate-500">LOADING...</div>
+  }
+
   const scrollToHowItWorks = () => document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })
 
   return (
     <main className="min-h-svh scroll-smooth overflow-hidden bg-[#05050a] text-white">
-      {/* An overlay rather than an early return - the hero section below it (and the
-          heroRef the scroll-parallax binds to) needs to mount on the very first render.
-          framer-motion's useScroll only reads the target ref once, on mount; if the
-          section were swapped in later post early-return, tracking would bind to a
-          stale null ref and never animate. */}
-      {checkingSession && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#05050a] font-mono text-xs text-slate-500">LOADING...</div>
-      )}
+      <motion.div
+        className="fixed inset-x-0 top-0 z-50 h-[3px] origin-left bg-gradient-to-r from-indigo-400 via-indigo-300 to-white"
+        style={{ scaleX: scrollProgress }}
+      />
       <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
         <motion.nav
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="flex items-center justify-between gap-4 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_20px_50px_-20px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:px-6"
+          className="flex items-center justify-between gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_20px_50px_-20px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:gap-4 sm:px-6 sm:py-2.5"
         >
-          <Link to="/" className="group flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white transition-opacity hover:opacity-80">
-            <span className="flex size-8 items-center justify-center rounded-full bg-indigo-500 text-white transition-transform duration-300 group-hover:scale-110"><ShieldCheck className="size-4" /></span>
-            FraudShield
+          <Link to="/" className="group flex items-center gap-1.5 text-xs font-semibold tracking-tight text-white transition-opacity hover:opacity-80 sm:gap-2.5 sm:text-sm">
+            <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white transition-transform duration-300 group-hover:scale-110 sm:size-8"><ShieldCheck className="size-3.5 sm:size-4" /></span>
+            <span className="whitespace-nowrap">FraudShield</span>
           </Link>
           <div className="hidden items-center gap-1 rounded-full border border-white/5 bg-white/[0.03] p-1 md:flex">
             {navLinks.map((link) => "href" in link ? (
@@ -190,55 +139,41 @@ export function SecurityHero() {
               </Link>
             ))}
           </div>
-          <div className="flex items-center gap-2">
-            <Link to="/sign-in" className="rounded-full px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/5 hover:text-white">
+          <div className="flex shrink-0 items-center gap-1 sm:gap-2">
+            <Link to="/sign-in" className="whitespace-nowrap rounded-full px-2.5 py-1.5 text-xs font-medium text-white/70 transition-colors hover:bg-white/5 hover:text-white sm:px-4 sm:py-2 sm:text-sm">
               Log in
             </Link>
-            <Link to="/sign-in?mode=signup" className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#0a0a0f] shadow-[0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-10px_rgba(255,255,255,0.35)]">
+            <Link to="/sign-in?mode=signup" className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full bg-white px-2.5 py-1.5 text-xs font-semibold text-[#0a0a0f] shadow-[0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-10px_rgba(255,255,255,0.35)] sm:px-4 sm:py-2 sm:text-sm">
               Sign up
             </Link>
           </div>
         </motion.nav>
 
         {/* ==================================================
-            HERO — terminal / pixel-grid aesthetic
+            HERO
         ================================================== */}
-        <section
-          ref={heroRef}
-          id="product"
-          className="hero-noir relative mt-6 scroll-mt-6 overflow-hidden rounded-[32px] border border-white/10"
-        >
-          <motion.div style={{ y: heroBgY }} className="pointer-events-none absolute inset-0 z-0" aria-hidden="true">
-            <div className="hero-noir-grain absolute inset-0" />
-            <div className="hero-noir-stars absolute inset-0" />
-            {HERO_DRIFT_DOTS.map((dot, index) => (
-              <span
-                key={index}
-                className="hero-noir-drift-dot absolute"
-                style={{ top: dot.top, left: dot.left, "--dx": dot.dx, "--dy": dot.dy, "--dur": dot.dur, "--delay": dot.delay } as CSSProperties}
-              />
-            ))}
-          </motion.div>
-          <div className="hero-noir-scanlines pointer-events-none absolute inset-0 z-[1]" aria-hidden="true" />
-          <div
-            ref={heroContentRef}
-            className="relative z-10 grid items-center gap-14 px-6 py-16 lg:grid-cols-[0.85fr_1.15fr] lg:px-14 lg:py-24"
-          >
-            <div className="relative z-10 max-w-xl">
+        <section ref={heroRef} id="product" className="security-hero scan-grid relative mt-6 scroll-mt-6 overflow-hidden rounded-[32px] border border-white/10">
+          <div className="scan-beam" />
+          <div className="relative z-10 grid items-center gap-14 px-6 py-16 lg:grid-cols-[0.85fr_1.15fr] lg:px-14 lg:py-24">
+            <motion.div style={{ y: heroCopyY, opacity: heroFade }} className="relative z-10 min-w-0 max-w-xl">
               <Reveal delay={0.05}>
                 <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-indigo-200">
                   <span className="size-1.5 rounded-full bg-indigo-300" />
                   Red Team vs. Blue Team, running 24/7
                 </span>
               </Reveal>
-              <Reveal delay={0.1}>
-                <p className="mt-5 font-mono text-xs font-semibold uppercase tracking-[0.3em] text-white/40">
-                  // Autonomous Fraud Defense
-                </p>
+              <Reveal delay={0.14}>
+                {/* The grid-stacks-two-children trick reserves the full headline's final
+                    height from first paint: the invisible full-text clone and the
+                    in-progress typed text share one grid cell, so the row sizes to the
+                    taller (always-complete) clone and nothing shifts as typing fills in. */}
+                <h1 className="hero-title grid text-4xl leading-[1.05] text-white sm:text-5xl sm:leading-[1.02] lg:text-6xl xl:text-[3.9rem]">
+                  <span aria-hidden="true" className="invisible [grid-area:1/1]">{HERO_HEADLINE}</span>
+                  <span className="[grid-area:1/1]">
+                    <TypingText text={HERO_HEADLINE} speed={65} startDelay={300} startImmediately />
+                  </span>
+                </h1>
               </Reveal>
-              <h1 className="hero-title pixel-headline mt-4 text-5xl leading-[1.15] text-white sm:text-6xl lg:text-[4rem]">
-                <PixelBuildIn text="Stop fraud before it becomes a story." />
-              </h1>
               <Reveal delay={0.22}>
                 <p className="mt-7 max-w-lg text-base leading-7 text-indigo-100/70 sm:text-lg">
                   FraudShield runs a continuous Red Team vs Blue Team adversarial loop — generating novel fraud patterns, detecting them across five independent signals, and closing detection gaps before real attackers find them.
@@ -246,10 +181,10 @@ export function SecurityHero() {
               </Reveal>
               <Reveal delay={0.3}>
                 <div className="mt-9 flex flex-wrap items-center gap-4">
-                  <Link to="/sign-in" className="hero-noir-btn-primary group inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold text-white">
+                  <Link to="/sign-in" className="group inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-[#0a0a0f] shadow-[0_0_0_rgba(255,255,255,0)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_16px_32px_-12px_rgba(255,255,255,0.4)]">
                     Login to Dashboard <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
                   </Link>
-                  <button type="button" onClick={scrollToHowItWorks} className="hero-noir-btn-ghost group inline-flex items-center gap-1.5 rounded-full px-5 py-3 text-sm font-medium text-white/80">
+                  <button type="button" onClick={scrollToHowItWorks} className="group inline-flex items-center gap-1.5 rounded-full border border-white/15 px-5 py-3 text-sm font-medium text-white/80 transition-all duration-300 hover:-translate-y-0.5 hover:border-indigo-400/40 hover:bg-white/5 hover:text-white">
                     See How It Works
                   </button>
                 </div>
@@ -257,13 +192,14 @@ export function SecurityHero() {
               <Reveal delay={0.36}>
                 <p className="mt-6 text-sm text-indigo-100/45">Built for security teams</p>
               </Reveal>
-            </div>
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0, y: 24, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-              className="relative z-10 mx-auto w-full max-w-155"
+              style={{ y: heroCardY }}
+              className="relative z-10 mx-auto w-full min-w-0 max-w-155"
             >
               <span className="absolute -top-4 left-6 z-20 inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-[#0a0a12] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-indigo-200 shadow-lg">
                 <ShieldHalf className="size-3" /> Live feed
@@ -290,7 +226,7 @@ export function SecurityHero() {
                 </div>
 
                 <div className="mt-8 grid grid-cols-2 gap-4 border-b border-white/10 pb-6">
-                  <div><p className="text-xs text-white/45">Current risk</p><p className="risk-score mt-2 text-4xl font-semibold tracking-tight text-white" aria-label="Current risk score" /></div>
+                  <div><p className="text-xs text-white/45">Current risk</p><p role="img" className="risk-score mt-2 text-4xl font-semibold tracking-tight text-white" aria-label="Current risk score" /></div>
                   <div><p className="text-xs text-white/45">Signals resolved</p><p className="mt-2 text-4xl font-semibold tracking-tight text-white">24<span className="text-lg text-white/40">/28</span></p></div>
                 </div>
 
@@ -314,17 +250,13 @@ export function SecurityHero() {
           <RevealStagger className="grid gap-4 sm:grid-cols-3">
             <RevealItem>
               <div className="h-full rounded-2xl border border-red-500/20 bg-white/[0.02] px-6 py-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-red-500/40">
-                <p className="font-mono text-4xl font-semibold tracking-tight text-red-300 tabular-nums">
-                  <CountUp target={79} suffix="%" />
-                </p>
+                <p className="text-4xl font-semibold tracking-tight text-red-300">79%</p>
                 <p className="mt-2 text-sm text-slate-400">of firms reported fraud attempts in 2024</p>
               </div>
             </RevealItem>
             <RevealItem>
               <div className="h-full rounded-2xl border border-red-500/20 bg-white/[0.02] px-6 py-6 text-center transition-all duration-300 hover:-translate-y-1 hover:border-red-500/40">
-                <p className="font-mono text-4xl font-semibold tracking-tight text-red-300 tabular-nums">
-                  <CountUp target={40} prefix="$" suffix="B+" />
-                </p>
+                <p className="text-4xl font-semibold tracking-tight text-red-300">$40B+</p>
                 <p className="mt-2 text-sm text-slate-400">in projected global fraud losses by 2027</p>
               </div>
             </RevealItem>
@@ -345,7 +277,7 @@ export function SecurityHero() {
           <Reveal>
             <div className="mb-8 text-center">
               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-indigo-300">Detection vs. Defense</p>
-              <h2 className="mt-2 text-3xl tracking-tight text-white sm:text-4xl">What Makes FraudShield Different</h2>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">What Makes FraudShield Different</h2>
             </div>
           </Reveal>
           <RevealStagger className="grid gap-4 md:grid-cols-2">
@@ -383,10 +315,10 @@ export function SecurityHero() {
           <Reveal>
             <div className="overflow-hidden rounded-[28px] border border-emerald-500/20 bg-gradient-to-br from-emerald-500/8 via-[#0d1520] to-[#0d1520]">
               <div className="grid gap-8 p-8 lg:grid-cols-[0.9fr_1.1fr] lg:p-12">
-                <div>
+                <div className="min-w-0">
                   <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-emerald-300">Quantified Impact</p>
                   {data ? (
-                    <div className="mt-4 flex items-end gap-3">
+                    <div className="mt-4 flex flex-wrap items-end gap-3">
                       <span className="text-6xl font-semibold tracking-tight text-white sm:text-7xl">+{data.adaptiveImprovement}%</span>
                       <span className="mb-2 flex items-center gap-1 text-sm font-medium text-emerald-400"><TrendingUp className="size-4" /> detection lift</span>
                     </div>
@@ -401,10 +333,27 @@ export function SecurityHero() {
                     <span className="ml-2 text-xs text-slate-500">Before adaptive defense → after adaptive defense</span>
                   </div>
                 </div>
-                <div className="h-48 w-full sm:h-56">
+                <div className="h-48 w-full min-w-0 sm:h-56">
                   {data && (
                     <ResponsiveContainer width="100%" height="100%">
-                      <LineChart data={data.detectionTrend}>
+                      <LineChart data={data.detectionTrend} margin={{ top: 8, right: 8, left: -8, bottom: 0 }}>
+                        <CartesianGrid stroke="var(--color-slate-800)" vertical={false} />
+                        <XAxis
+                          dataKey="label"
+                          tickFormatter={(value: string) => value.replace("Cycle ", "")}
+                          tick={{ fill: "var(--color-slate-500)", fontSize: 10 }}
+                          axisLine={{ stroke: "var(--color-slate-800)" }}
+                          tickLine={false}
+                          interval={1}
+                        />
+                        <YAxis
+                          domain={[60, 100]}
+                          unit="%"
+                          tick={{ fill: "var(--color-slate-500)", fontSize: 10 }}
+                          axisLine={{ stroke: "var(--color-slate-800)" }}
+                          tickLine={false}
+                          width={40}
+                        />
                         <Line type="monotone" dataKey="beforeAdaptive" stroke="var(--color-red-400)" strokeWidth={2} strokeDasharray="6 4" dot={false} isAnimationActive={false} />
                         <Line type="monotone" dataKey="afterAdaptive" stroke="var(--color-emerald-400)" strokeWidth={2.5} dot={false} isAnimationActive={false} />
                       </LineChart>
@@ -423,24 +372,24 @@ export function SecurityHero() {
           <Reveal>
             <div className="mb-10 text-center">
               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-indigo-300">How It Works</p>
-              <h2 className="mt-2 text-3xl tracking-tight text-white sm:text-4xl">One closed loop, six steps</h2>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">One closed loop, six steps</h2>
             </div>
           </Reveal>
-          <RevealStagger className="flex flex-col gap-3 md:flex-row md:items-stretch md:gap-2">
+          <RevealStagger className="flex flex-col gap-10 md:flex-row md:items-start md:gap-2">
             {HOW_IT_WORKS.map(({ title, detail, icon: Icon }, index) => (
               <Fragment key={title}>
-                <RevealItem className="flex-1">
-                  <div className="h-full rounded-2xl border border-white/10 bg-white/[0.02] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-indigo-400/30">
-                    <div className="flex items-center justify-between">
-                      <span className="font-mono text-xs text-white/30">0{index + 1}</span>
-                      <Icon className="size-4 text-indigo-300" />
-                    </div>
-                    <h4 className="mt-4 text-base text-white">{title}</h4>
-                    <p className="mt-1.5 text-xs leading-relaxed text-white/50">{detail}</p>
+                <RevealItem className="flex flex-1 flex-col items-center text-center">
+                  <div className="relative flex size-16 shrink-0 items-center justify-center rounded-full border border-indigo-400/25 bg-gradient-to-b from-indigo-500/15 to-transparent shadow-[0_0_24px_-6px_rgba(99,102,241,0.5)] transition-transform duration-300 hover:scale-110">
+                    <Icon className="size-6 text-indigo-300" />
+                    <span className="absolute -right-1 -top-1 flex size-5 items-center justify-center rounded-full border border-white/15 bg-[#0a0a12] font-mono text-[9px] font-semibold text-white/50">
+                      {index + 1}
+                    </span>
                   </div>
+                  <h3 className="mt-4 text-sm font-semibold text-white">{title}</h3>
+                  <p className="mt-2 max-w-[12rem] text-xs leading-relaxed text-white/50">{detail}</p>
                 </RevealItem>
                 {index < HOW_IT_WORKS.length - 1 && (
-                  <div className="hidden shrink-0 items-center justify-center md:flex">
+                  <div className="hidden shrink-0 items-center pt-8 md:flex">
                     <ChevronRight className="size-4 text-white/20" />
                   </div>
                 )}
@@ -456,7 +405,7 @@ export function SecurityHero() {
           <Reveal>
             <div className="mb-8 text-center">
               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-emerald-300">Built for Real-World Deployment</p>
-              <h2 className="mt-2 text-3xl tracking-tight text-white sm:text-4xl">Regulatory &amp; Privacy Readiness</h2>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Regulatory &amp; Privacy Readiness</h2>
             </div>
           </Reveal>
           <RevealStagger className="grid gap-4 sm:grid-cols-2">
@@ -516,7 +465,7 @@ export function SecurityHero() {
         <section className="border-t border-white/5 py-16 text-center">
           <Reveal>
             <div className="mx-auto flex size-12 items-center justify-center rounded-full border border-indigo-400/30 bg-indigo-500/10 text-indigo-300"><Bot className="size-5" /></div>
-            <h2 className="mx-auto mt-5 max-w-xl text-3xl tracking-tight text-white sm:text-4xl">It doesn't just detect. It attacks itself to get better.</h2>
+            <h2 className="mx-auto mt-5 max-w-xl text-2xl font-semibold tracking-tight text-white sm:text-3xl">It doesn't just detect. It attacks itself to get better.</h2>
             <div className="mt-8">
               <Link to="/sign-in" className="group inline-flex items-center gap-2 rounded-full bg-white px-6 py-3.5 text-sm font-semibold text-[#0a0a0f] transition-transform hover:-translate-y-0.5">
                 Login to Dashboard <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />

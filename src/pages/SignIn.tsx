@@ -1,15 +1,87 @@
-import { useEffect, useState, type FormEvent } from "react"
+import { useEffect, useState, type FormEvent, type ReactNode } from "react"
 import { Link, useNavigate, useSearchParams } from "react-router-dom"
 import { motion } from "framer-motion"
-import { AlertTriangle, ArrowLeft, Check, Eye, EyeOff, Fingerprint, Loader2, Lock, Mail, ShieldCheck, Sparkles } from "lucide-react"
+import { AlertTriangle, ArrowLeft, Check, Eye, EyeOff, Fingerprint, KeyRound, Loader2, Lock, Mail, ShieldCheck, Sparkles, type LucideIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { supabase } from "@/lib/supabase"
+import { CyberGrid } from "@/components/motion/CyberGrid"
 
 const highlights = [
   { label: "Real-time signal fusion", detail: "40+ risk signals scored in under 200ms" },
   { label: "Adaptive defense loop", detail: "Missed attacks retrain the ensemble automatically" },
   { label: "Zero standing trust", detail: "Every session is continuously re-verified" },
 ]
+
+const trustBadges = [
+  { icon: ShieldCheck, label: "SOC 2 Type II" },
+  { icon: Lock, label: "256-bit encryption" },
+  { icon: KeyRound, label: "SSO / MFA ready" },
+]
+
+// The label doubles as the placeholder: it rests inline where placeholder text
+// normally sits, then rises into a small caption above the field the moment the
+// user focuses in or has typed something, so it never collides with their input.
+// The field itself lifts slightly while focused so the active row reads clearly.
+function FloatingField({
+  id,
+  label,
+  icon: Icon,
+  type = "text",
+  value,
+  onChange,
+  required,
+  minLength,
+  rightSlot,
+}: {
+  id: string
+  label: string
+  icon: LucideIcon
+  type?: string
+  value: string
+  onChange: (value: string) => void
+  required?: boolean
+  minLength?: number
+  rightSlot?: ReactNode
+}) {
+  const [focused, setFocused] = useState(false)
+  const risen = focused || value.length > 0
+
+  return (
+    <div className="relative">
+      <label
+        htmlFor={id}
+        className={cn(
+          "pointer-events-none absolute z-10 font-medium text-white/25 transition-all duration-200 ease-out",
+          risen
+            ? "left-0 -top-5.5 text-[10px] uppercase tracking-wider text-indigo-300"
+            : "left-10 top-1/2 -translate-y-1/2 text-sm normal-case tracking-normal text-white/25",
+        )}
+      >
+        {label}
+      </label>
+      <div
+        className={cn(
+          "flex items-center gap-2.5 rounded-xl border bg-white/[0.03] px-3.5 py-2.5 transition-all duration-200",
+          focused ? "-translate-y-0.5 border-indigo-400/60 shadow-[0_10px_28px_-16px_rgba(99,102,241,0.5)]" : "border-white/10",
+        )}
+      >
+        <Icon className="size-4 shrink-0 text-white/30" />
+        <input
+          id={id}
+          type={type}
+          required={required}
+          minLength={minLength}
+          value={value}
+          onChange={(event) => onChange(event.target.value)}
+          onFocus={() => setFocused(true)}
+          onBlur={() => setFocused(false)}
+          className="w-full bg-transparent text-sm text-white focus:outline-none"
+        />
+        {rightSlot}
+      </div>
+    </div>
+  )
+}
 
 export function SignIn() {
   const [searchParams] = useSearchParams()
@@ -130,8 +202,11 @@ export function SignIn() {
         <p className="relative z-10 text-xs text-indigo-100/40">Trusted signal, clear decisions, fewer false positives.</p>
       </div>
 
-      <div className="flex flex-col justify-center px-6 py-12 sm:px-12 lg:px-16 xl:px-20">
-        <Link to="/" className="mb-10 inline-flex w-fit items-center gap-2 text-xs font-medium text-white/40 transition-colors hover:text-white/70 lg:hidden">
+      <div className="relative flex flex-col justify-center overflow-hidden px-6 py-12 sm:px-12 lg:px-16 xl:px-20">
+        <CyberGrid className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-[0.07]" />
+        <div className="pointer-events-none absolute -right-32 top-1/3 z-0 size-96 rounded-full bg-indigo-500/10 blur-3xl" />
+
+        <Link to="/" className="relative z-10 mb-10 inline-flex w-fit items-center gap-2 text-xs font-medium text-white/40 transition-colors hover:text-white/70 lg:hidden">
           <ArrowLeft className="size-3.5" /> Back to FraudShield
         </Link>
 
@@ -139,7 +214,7 @@ export function SignIn() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="mx-auto w-full max-w-sm rounded-3xl border border-white/10 bg-white/[0.02] p-7 shadow-[0_30px_80px_-30px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:p-8"
+          className="relative z-10 mx-auto w-full max-w-sm rounded-3xl border border-white/10 bg-white/[0.02] p-7 shadow-[0_30px_80px_-30px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:p-8"
         >
           <div className="mb-8 flex items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] p-1">
             <button
@@ -163,35 +238,30 @@ export function SignIn() {
             {mode === "signin" ? "Sign in to your security console." : "Set up access to the defense grid."}
           </p>
 
-          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          <form onSubmit={handleSubmit} className="mt-8 space-y-8">
             {mode === "signup" && (
-              <div>
-                <label htmlFor="name" className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/40">Full name</label>
-                <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 transition-colors focus-within:border-indigo-400/60">
-                  <Fingerprint className="size-4 text-white/30" />
-                  <input id="name" type="text" required value={name} onChange={(event) => setName(event.target.value)} placeholder="Jordan Ellis" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
-                </div>
-              </div>
+              <FloatingField id="name" label="Full name" icon={Fingerprint} value={name} onChange={setName} required />
             )}
-            <div>
-              <label htmlFor="email" className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/40">Work email</label>
-              <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 transition-colors focus-within:border-indigo-400/60">
-                <Mail className="size-4 text-white/30" />
-                <input id="email" type="email" required value={email} onChange={(event) => setEmail(event.target.value)} placeholder="you@company.com" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
-              </div>
-            </div>
-            <div>
-              <div className="mb-1.5 flex items-center justify-between">
-                <label htmlFor="password" className="block text-xs font-medium uppercase tracking-wider text-white/40">Password</label>
-                {mode === "signin" && <button type="button" className="text-xs font-medium text-indigo-300 hover:text-indigo-200">Forgot?</button>}
-              </div>
-              <div className="flex items-center gap-2.5 rounded-xl border border-white/10 bg-white/[0.03] px-3.5 py-2.5 transition-colors focus-within:border-indigo-400/60">
-                <Lock className="size-4 text-white/30" />
-                <input id="password" type={showPassword ? "text" : "password"} required minLength={6} value={password} onChange={(event) => setPassword(event.target.value)} placeholder="••••••••••" className="w-full bg-transparent text-sm text-white placeholder:text-white/25 focus:outline-none" />
-                <button type="button" onClick={() => setShowPassword((v) => !v)} className="text-white/30 transition-colors hover:text-white/60" aria-label={showPassword ? "Hide password" : "Show password"}>
-                  {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
-                </button>
-              </div>
+            <FloatingField id="email" label="Work email" icon={Mail} type="email" value={email} onChange={setEmail} required />
+            <div className="relative">
+              {mode === "signin" && (
+                <button type="button" className="absolute -top-5.5 right-0 z-10 text-[10px] font-medium text-indigo-300 hover:text-indigo-200">Forgot?</button>
+              )}
+              <FloatingField
+                id="password"
+                label="Password"
+                icon={Lock}
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={setPassword}
+                required
+                minLength={6}
+                rightSlot={
+                  <button type="button" onClick={() => setShowPassword((v) => !v)} className="shrink-0 text-white/30 transition-colors hover:text-white/60" aria-label={showPassword ? "Hide password" : "Show password"}>
+                    {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
+                  </button>
+                }
+              />
             </div>
 
             {error && (
@@ -223,6 +293,19 @@ export function SignIn() {
               {mode === "signin" ? "Create an account" : "Sign in"}
             </button>
           </p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className="relative z-10 mx-auto mt-8 flex w-full max-w-sm flex-wrap items-center justify-center gap-x-6 gap-y-2"
+        >
+          {trustBadges.map(({ icon: Icon, label }) => (
+            <span key={label} className="inline-flex items-center gap-1.5 text-xs text-white/30">
+              <Icon className="size-3.5" /> {label}
+            </span>
+          ))}
         </motion.div>
       </div>
     </main>

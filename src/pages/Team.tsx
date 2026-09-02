@@ -127,7 +127,7 @@ export function Team() {
       <Reveal>
         <div>
           <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-indigo-300">Operations / Roster</p>
-          <h2 className="mt-2 text-4xl tracking-tight text-white">The Team</h2>
+          <h1 className="mt-2 text-3xl font-semibold tracking-tight text-white">The Team</h1>
           <p className="mt-2 max-w-2xl text-sm text-slate-500">
             Three roles, one autonomous fraud defense loop.
           </p>
