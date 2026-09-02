@@ -105,8 +105,8 @@ export function SignIn() {
           <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-indigo-200">
             <Sparkles className="size-3.5" /> Built for security teams
           </span>
-          <h1 className="hero-title text-4xl leading-[1.05] text-white xl:text-5xl">
-            Access built for the team that never sleeps.
+          <h1 className="hero-title text-5xl leading-[1.05] text-white xl:text-6xl">
+            Access built for the team that <span className="text-amber-300">never sleeps.</span>
           </h1>
           <div className="mt-10 space-y-5">
             {highlights.map(({ label, detail }, index) => (
@@ -158,7 +158,7 @@ export function SignIn() {
             </button>
           </div>
 
-          <h2 className="hero-title text-3xl text-white">{mode === "signin" ? "Welcome back." : "Get started."}</h2>
+          <h2 className="hero-title text-4xl text-white">{mode === "signin" ? "Welcome back." : "Get started."}</h2>
           <p className="mt-2 text-sm text-white/45">
             {mode === "signin" ? "Sign in to your security console." : "Set up access to the defense grid."}
           </p>

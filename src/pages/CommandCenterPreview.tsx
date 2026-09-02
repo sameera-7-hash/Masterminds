@@ -45,7 +45,7 @@ export function CommandCenterPreview() {
           <div className="mt-8 flex items-center gap-2 font-mono text-[10px] uppercase tracking-[0.22em] text-indigo-300">
             <Lock className="size-3" /> Live preview / read-only
           </div>
-          <h1 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">Command Center</h1>
+          <h1 className="mt-2 text-3xl tracking-tight text-white sm:text-4xl">Command Center</h1>
           <p className="mt-2 max-w-xl text-sm text-slate-500">This is the same live data feed the real dashboard runs on. Sign up to run attacks, watch the Blue Team respond, and see the full transaction feed.</p>
         </Reveal>
 
