@@ -57,7 +57,7 @@ export function AppLayout() {
           <TerminalSquare className="size-5" />
         </div>
         <div>
-          <p className="font-mono text-sm font-bold tracking-[0.18em] text-white">FRAUDSHIELD</p>
+          <p className="font-mono text-sm font-bold tracking-[0.18em] text-white">CLINCH</p>
           <p className="font-mono text-[10px] uppercase tracking-[0.26em] text-zinc-500">AI DEFENSE GRID</p>
         </div>
       </Link>

@@ -54,7 +54,7 @@ const CONVENTIONAL = [
   "Manually curated test cases",
 ]
 
-const FRAUDSHIELD = [
+const CLINCH = [
   "Rules + ML + Anomaly + Graph + RAG fused",
   "Purpose-built novelty testing",
   "Explainable AI reasoning per decision",
@@ -126,7 +126,7 @@ export function SecurityHero() {
         >
           <Link to="/" className="group flex items-center gap-1.5 text-xs font-semibold tracking-tight text-white transition-opacity hover:opacity-80 sm:gap-2.5 sm:text-sm">
             <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-indigo-500 text-white transition-transform duration-300 group-hover:scale-110 sm:size-8"><ShieldCheck className="size-3.5 sm:size-4" /></span>
-            <span className="whitespace-nowrap">FraudShield</span>
+            <span className="whitespace-nowrap">Clinch</span>
           </Link>
           <div className="hidden items-center gap-1 rounded-full border border-white/5 bg-white/[0.03] p-1 md:flex">
             {navLinks.map((link) => "href" in link ? (
@@ -176,7 +176,7 @@ export function SecurityHero() {
               </Reveal>
               <Reveal delay={0.22}>
                 <p className="mt-7 max-w-lg text-base leading-7 text-indigo-100/70 sm:text-lg">
-                  FraudShield runs a continuous Red Team vs Blue Team adversarial loop — generating novel fraud patterns, detecting them across five independent signals, and closing detection gaps before real attackers find them.
+                  Clinch runs a continuous Red Team vs Blue Team adversarial loop — generating novel fraud patterns, detecting them across five independent signals, and closing detection gaps before real attackers find them.
                 </p>
               </Reveal>
               <Reveal delay={0.3}>
@@ -277,7 +277,7 @@ export function SecurityHero() {
           <Reveal>
             <div className="mb-8 text-center">
               <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-indigo-300">Detection vs. Defense</p>
-              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">What Makes FraudShield Different</h2>
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-white sm:text-3xl">What Makes Clinch Different</h2>
             </div>
           </Reveal>
           <RevealStagger className="grid gap-4 md:grid-cols-2">
@@ -295,9 +295,9 @@ export function SecurityHero() {
             </RevealItem>
             <RevealItem>
               <div className="h-full overflow-hidden rounded-2xl border border-blue-500/40 bg-[#0d1520] shadow-[0_0_50px_-24px_rgba(59,130,246,0.5)]">
-                <div className="border-b border-white/10 px-5 py-4"><p className="text-sm font-medium text-blue-300">FraudShield</p></div>
+                <div className="border-b border-white/10 px-5 py-4"><p className="text-sm font-medium text-blue-300">Clinch</p></div>
                 <div className="space-y-3 p-5">
-                  {FRAUDSHIELD.map((item) => (
+                  {CLINCH.map((item) => (
                     <div key={item} className="flex items-start gap-2.5 text-sm text-white">
                       <Check className="mt-0.5 size-4 shrink-0 text-blue-400" /> {item}
                     </div>
@@ -428,7 +428,7 @@ export function SecurityHero() {
             <div className="flex flex-col items-start gap-6 rounded-[28px] border border-amber-500/15 bg-gradient-to-br from-amber-500/8 via-white/[0.02] to-transparent p-8 sm:flex-row sm:items-center sm:justify-between sm:p-10">
               <div className="max-w-xl">
                 <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-amber-300">Business Case</p>
-                <p className="mt-3 text-lg leading-relaxed text-white">Blocking legitimate transactions costs banks customer trust and revenue just as much as missed fraud does. FraudShield is tuned to catch fraud without creating friction that drives customers away.</p>
+                <p className="mt-3 text-lg leading-relaxed text-white">Blocking legitimate transactions costs banks customer trust and revenue just as much as missed fraud does. Clinch is tuned to catch fraud without creating friction that drives customers away.</p>
               </div>
               <div className="shrink-0 rounded-2xl border border-amber-500/20 bg-[#0d1520] px-6 py-5 text-center">
                 <p className="text-3xl font-semibold text-amber-300">{data ? `${data.falsePositiveRate}%` : "—"}</p>

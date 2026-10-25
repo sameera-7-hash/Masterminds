@@ -165,7 +165,7 @@ export function SignIn() {
         <div className="scan-beam" />
         <Link to="/" className="relative z-10 flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white">
           <span className="flex size-8 items-center justify-center rounded-full bg-white text-[#312e81]"><ShieldCheck className="size-4" /></span>
-          FraudShield
+          Clinch
         </Link>
 
         <motion.div
@@ -207,7 +207,7 @@ export function SignIn() {
         <div className="pointer-events-none absolute -right-32 top-1/3 z-0 size-96 rounded-full bg-indigo-500/10 blur-3xl" />
 
         <Link to="/" className="relative z-10 mb-10 inline-flex w-fit items-center gap-2 text-xs font-medium text-white/40 transition-colors hover:text-white/70 lg:hidden">
-          <ArrowLeft className="size-3.5" /> Back to FraudShield
+          <ArrowLeft className="size-3.5" /> Back to Clinch
         </Link>
 
         <motion.div
@@ -288,7 +288,7 @@ export function SignIn() {
           </form>
 
           <p className="mt-8 text-center text-xs text-white/35">
-            {mode === "signin" ? "New to FraudShield? " : "Already have an account? "}
+            {mode === "signin" ? "New to Clinch? " : "Already have an account? "}
             <button type="button" onClick={() => { setMode(mode === "signin" ? "signup" : "signin"); setError(""); setNotice("") }} className="font-medium text-indigo-300 hover:text-indigo-200">
               {mode === "signin" ? "Create an account" : "Sign in"}
             </button>

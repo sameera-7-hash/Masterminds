@@ -50,7 +50,7 @@ export function About() {
           <nav className="flex items-center justify-between gap-4 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_20px_50px_-20px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:px-6">
             <Link to="/" className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white">
               <span className="flex size-8 items-center justify-center rounded-full bg-indigo-500 text-white"><ShieldCheck className="size-4" /></span>
-              FraudShield
+              Clinch
             </Link>
             <div className="flex items-center gap-2">
               <Link to="/preview" className="hidden rounded-full px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:text-white sm:inline-flex">
@@ -66,7 +66,7 @@ export function About() {
         <section className="pt-16 pb-12 text-center sm:pt-20">
           <Reveal delay={0.05}>
             <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-indigo-200">
-              <Sparkles className="size-3.5" /> Built for Mastercard Innovation Challenge 2026
+              <Sparkles className="size-3.5" /> Red Team vs. Blue Team, live
             </span>
           </Reveal>
           <Reveal delay={0.12}>
@@ -76,7 +76,7 @@ export function About() {
           </Reveal>
           <Reveal delay={0.2}>
             <p className="mx-auto mt-6 max-w-2xl text-base leading-7 text-indigo-100/70 sm:text-lg">
-              Most fraud demos show you a dashboard with numbers that came from nowhere. FraudShield generates the attacks itself, defends against them in real time, and shows you exactly why every decision was made - so what you're watching is a real adversarial loop, not a slideshow.
+              Most fraud demos show you a dashboard with numbers that came from nowhere. Clinch generates the attacks itself, defends against them in real time, and shows you exactly why every decision was made - so what you're watching is a real adversarial loop, not a slideshow.
             </p>
           </Reveal>
         </section>

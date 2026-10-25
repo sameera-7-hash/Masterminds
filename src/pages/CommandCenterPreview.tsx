@@ -10,7 +10,7 @@ import { CyberGrid } from "@/components/motion/CyberGrid"
 
 // A public, read-only slice of the real Command Center - same live snapshot data, no
 // login required. It's intentionally not the full page: the goal is to let a visitor
-// (or a hackathon judge) feel the product for a few seconds, then hand them the sign-up
+// (or an evaluator) feel the product for a few seconds, then hand them the sign-up
 // CTA before they reach the parts that need an account (running attacks, live sync).
 export function CommandCenterPreview() {
   const [snapshot, setSnapshot] = useState<Awaited<ReturnType<typeof getDashboardData>> | null>(null)
@@ -32,7 +32,7 @@ export function CommandCenterPreview() {
           <nav className="flex items-center justify-between gap-4 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 backdrop-blur-xl sm:px-6">
             <Link to="/" className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white">
               <span className="flex size-8 items-center justify-center rounded-full bg-indigo-500 text-white"><ShieldCheck className="size-4" /></span>
-              FraudShield
+              Clinch
             </Link>
             <div className="flex items-center gap-2">
               <Link to="/sign-in" className="rounded-full px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:text-white">Log in</Link>

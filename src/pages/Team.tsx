@@ -112,7 +112,7 @@ export function Team() {
         <nav className="flex items-center justify-between gap-4 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2.5 shadow-[0_0_0_1px_rgba(255,255,255,0.02),0_20px_50px_-20px_rgba(79,70,229,0.35)] backdrop-blur-xl sm:px-6">
           <Link to="/" className="flex items-center gap-2.5 text-sm font-semibold tracking-tight text-white">
             <span className="flex size-8 items-center justify-center rounded-full bg-indigo-500 text-white"><ShieldCheck className="size-4" /></span>
-            FraudShield
+            Clinch
           </Link>
           <Link to="/sign-in" className="inline-flex items-center gap-1.5 rounded-full bg-white px-4 py-2 text-sm font-semibold text-[#0a0a0f] transition-transform hover:-translate-y-0.5">
             Login to Dashboard

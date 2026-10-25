@@ -1,10 +1,10 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:2c5364,100:00c6ff&height=220&section=header&text=FraudShield%20AI&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=Auton[...]
+<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0f2027,50:2c5364,100:00c6ff&height=220&section=header&text=Clinch&fontSize=52&fontColor=ffffff&fontAlignY=38&desc=Auton[...]
 
 <br/>
 
-<img src="public/favicon.svg" width="150" alt="Fraud Shield Logo"/>
+<img src="public/favicon.svg" width="150" alt="Clinch Logo"/>
 
 <br/><br/>
 
@@ -12,8 +12,7 @@
 
 <br/>
 
-**🏆 Mastercard Innovation Challenge @ GFF 2026**
-Frontend Codename: **FraudShield AI Dashboard** &nbsp;·&nbsp; Core Engine: **SentinelPay AI**
+Frontend Codename: **Clinch Dashboard** &nbsp;·&nbsp; Core Engine: **SentinelPay AI**
 
 <br/>
 
@@ -424,7 +423,7 @@ python -m uvicorn blue_team_api:app --reload
 ### Frontend Dashboard
 
 ```bash
-cd fraudshield-app
+# from the repository root
 npm install
 npm run dev
 ```
